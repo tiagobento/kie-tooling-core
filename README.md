@@ -1,15 +1,8 @@
-# @peterschussheim/monaco-editor
+# @kiegroup/monaco-editor
 
-> Prebuilt, single file ES module containing CSS and worker scripts.
-
-## Why
-
-TODO
+Prebuilt, single file ES module containing CSS, fonts and worker scripts (javascript and typescript).
+Forked from @peterschussheim/monaco-editor.
 
 ## Installation
 
-`yarn add @peterschussheim/monaco-editor`
-
-## Usage
-
-`import * as monaco from '@peterschussheim/monaco-editor'`
+`yarn add @kiegroup/monaco-editor`
