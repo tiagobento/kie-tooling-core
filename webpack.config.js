@@ -4,14 +4,18 @@ const webpack = require('webpack');
 module.exports = {
     mode: 'production',
     entry: {
-        standalone: './src/standalone.js'
+        "monaco.min": './src/monaco.min.ts'
     },
     output: {
-        filename: 'monaco.min.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist/standalone')
     },
     module: {
         rules: [
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader"
+            },
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']

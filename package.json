@@ -1,8 +1,9 @@
 {
   "name": "@kiegroup/monaco-editor",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Single-file build of monaco-editor.",
   "main": "dist/standalone/monaco.min.js",
+  "types": "dist/standalone/monaco.min.d.ts",
   "license": "MIT",
   "files": [
     "dist/standalone"
@@ -23,7 +24,9 @@
     "style-loader": "^1.2.1",
     "webpack-cli": "^3.3.12",
     "webpack": "^4.44.2",
-    "rimraf": "2.6.2"
+    "rimraf": "2.6.2",
+    "typescript": "^4.2.2",
+    "ts-loader": "^8.0.17"
   },
   "dependencies": {},
   "keywords": [
