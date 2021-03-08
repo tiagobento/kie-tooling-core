@@ -1,6 +1,6 @@
 {
   "name": "@kiegroup/monaco-editor",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Single-file build of monaco-editor.",
   "main": "dist/standalone/monaco.min.js",
   "types": "dist/standalone/monaco.min.d.ts",
@@ -17,15 +17,15 @@
     "locktt": "locktt"
   },
   "devDependencies": {
-    "cross-env": "5.1.4",
+    "cross-env": "^7.0.3",
     "null-loader": "^4.0.1",
-    "css-loader": "^4.3.0",
-    "monaco-editor": "^0.21.0",
-    "style-loader": "^1.2.1",
-    "webpack-cli": "^3.3.12",
-    "webpack": "^4.44.2",
-    "rimraf": "2.6.2",
-    "typescript": "^4.2.2",
+    "css-loader": "^5.1.1",
+    "monaco-editor": "^0.23.0",
+    "style-loader": "^2.0.0",
+    "webpack-cli": "^4.5.0",
+    "webpack": "^5.24.4",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.2.3",
     "ts-loader": "^8.0.17"
   },
   "dependencies": {},

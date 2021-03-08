@@ -7,6 +7,7 @@ module.exports = {
         "monaco.min": './src/monaco.min.ts'
     },
     output: {
+        libraryTarget: "commonjs2",
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist/standalone')
     },
