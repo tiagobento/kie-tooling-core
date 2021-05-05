@@ -7,7 +7,8 @@ module.exports = {
         "monaco.min": './src/monaco.min.ts'
     },
     output: {
-        libraryTarget: "commonjs2",
+        libraryTarget: "umd",
+        library: "monaco",
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist/standalone')
     },
@@ -23,7 +24,7 @@ module.exports = {
             },
             {
                 test: /\.ttf$/,
-                use: ["null-loader"],
+                use: ['url-loader'],
             }
         ]
     },
