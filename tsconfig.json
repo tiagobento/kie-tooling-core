@@ -9,6 +9,7 @@
     "noImplicitThis": true,
     "removeComments": true,
     "strictNullChecks": true,
+    "sourceMap": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "jsx": "react-jsx"

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { I18n, ReferenceDictionary, TranslatedDictionary } from "../../core";
+import { I18n, ReferenceDictionary, TranslatedDictionary } from "@kie-tooling-core/i18n/dist/core";
 
 interface TestI18n extends ReferenceDictionary {
   test: string;
