@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-const nodeExternals = require("webpack-node-externals");
-const { merge } = require("webpack-merge");
-const common = require("../../webpack.common.config");
-
-module.exports = (env, argv) =>
-  merge(common(env, argv), {
-    entry: {
-      index: "./src/index.ts",
-    },
-    output: {
-      libraryTarget: "commonjs2",
-    },
-    externals: [nodeExternals({ modulesDir: "../../node_modules" })],
-  });
+module.exports = {
+  reporters: ["default"],
+  moduleDirectories: ["node_modules"],
+  moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
+  testRegex: "/tests/.*\\.test\\.(jsx?|tsx?)$",
+  transform: {
+    "^.+\\.jsx?$": "babel-jest",
+    "^.+\\.tsx?$": "ts-jest",
+  },
+  moduleNameMapper: {
+    "\\.(css|less|sass|scss)$": "<rootDir>/tests/__mocks__/styleMock.js",
+  },
+};

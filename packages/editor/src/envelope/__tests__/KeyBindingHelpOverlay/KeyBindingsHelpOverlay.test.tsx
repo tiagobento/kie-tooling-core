@@ -17,7 +17,7 @@
 import * as React from "react";
 import { KeyBindingsHelpOverlay } from "../../../envelope/KeyBindingsHelpOverlay";
 import { DefaultKeyboardShortcutsService } from "@kie-tooling-core/keyboard-shortcuts/dist/envelope";
-import { OperatingSystem } from "@kie-tooling-core/channel-common-api";
+import { OperatingSystem } from "@kie-tooling-core/operating-system";
 import { fireEvent, render } from "@testing-library/react";
 import { DEFAULT_TESTING_ENVELOPE_CONTEXT, usingEditorEnvelopeI18nContext, usingEnvelopeContext } from "../utils";
 

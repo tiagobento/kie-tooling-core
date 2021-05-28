@@ -30,7 +30,7 @@ import { DefaultKeyboardShortcutsService } from "@kie-tooling-core/keyboard-shor
 import { I18nService } from "@kie-tooling-core/i18n/dist/envelope";
 import { Envelope, EnvelopeApiFactory } from "@kie-tooling-core/envelope";
 import { EditorEnvelopeViewApi } from "./EditorEnvelopeView";
-import { getOperatingSystem } from "@kie-tooling-core/channel-common-api";
+import { getOperatingSystem } from "@kie-tooling-core/operating-system";
 
 /**
  * Starts the Editor envelope at a given container. Uses `bus` to send messages out of the Envelope and creates Editors based on the editorFactory provided.

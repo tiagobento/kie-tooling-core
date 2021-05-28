@@ -20,7 +20,7 @@ import { ApiDefinition, MessageBusClientApi } from "@kie-tooling-core/envelope-b
 import { KogitoEditorChannelApi } from "./KogitoEditorChannelApi";
 import { DefaultKeyboardShortcutsService } from "@kie-tooling-core/keyboard-shortcuts/dist/envelope";
 import { I18nService } from "@kie-tooling-core/i18n/dist/envelope";
-import { OperatingSystem } from "@kie-tooling-core/channel-common-api";
+import { OperatingSystem } from "@kie-tooling-core/operating-system";
 
 export interface KogitoEditorEnvelopeContextType<
   ChannelApi extends KogitoEditorChannelApi & ApiDefinition<ChannelApi>
