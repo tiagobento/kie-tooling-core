@@ -16,13 +16,13 @@
 
 import * as React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { SingleEditorApp } from "../../../../app/components/single/SingleEditorApp";
+import { SingleEditorApp } from "@kie-tooling-core/chrome-extension/dist/app/components/single/SingleEditorApp";
 import {
   usingTestingChromeExtensionI18nContext,
   usingTestingGitHubContext,
   usingTestingGlobalContext,
 } from "../../../testing_utils";
-import { removeAllChildren } from "../../../../app/utils";
+import { removeAllChildren } from "@kie-tooling-core/chrome-extension/dist/app/utils";
 
 beforeAll(() => {
   chrome.extension = {

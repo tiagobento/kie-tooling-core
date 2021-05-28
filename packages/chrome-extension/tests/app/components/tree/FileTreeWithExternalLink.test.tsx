@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { createTargetUrl } from "../../../../app/components/tree/FileTreeWithExternalLink";
+import { createTargetUrl } from "@kie-tooling-core/chrome-extension/dist/app/components/tree/FileTreeWithExternalLink";
 
 const externalEditorManager = {
   name: "test",

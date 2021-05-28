@@ -15,15 +15,25 @@
  */
 
 import * as React from "react";
-import { GlobalContext, GlobalContextType } from "../app/components/common/GlobalContext";
-import { ResourceContentServiceFactory } from "../app/components/common/ChromeResourceContentService";
-import { GitHubContext, GitHubContextType } from "../app/components/common/GitHubContext";
-import { Logger } from "../Logger";
-import { Dependencies } from "../app/Dependencies";
+import {
+  GlobalContext,
+  GlobalContextType,
+} from "@kie-tooling-core/chrome-extension/dist/app/components/common/GlobalContext";
+import { ResourceContentServiceFactory } from "@kie-tooling-core/chrome-extension/dist/app/components/common/ChromeResourceContentService";
+import {
+  GitHubContext,
+  GitHubContextType,
+} from "@kie-tooling-core/chrome-extension/dist/app/components/common/GitHubContext";
+import { Logger } from "@kie-tooling-core/chrome-extension/dist/Logger";
+import { Dependencies } from "@kie-tooling-core/chrome-extension/dist/app/Dependencies";
 import { EditorEnvelopeLocator, EnvelopeMapping } from "@kie-tooling-core/editor/dist/api";
 import { I18nDictionariesProvider, I18nDictionariesProviderProps } from "@kie-tooling-core/i18n/dist/react-components";
-import { ChromeExtensionI18nContext, chromeExtensionI18nDictionaries, chromeExtensionI18nDefaults } from "../app/i18n";
-import { ChromeExtensionI18n } from "../app/i18n";
+import {
+  ChromeExtensionI18nContext,
+  chromeExtensionI18nDictionaries,
+  chromeExtensionI18nDefaults,
+} from "@kie-tooling-core/chrome-extension/dist/app/i18n";
+import { ChromeExtensionI18n } from "@kie-tooling-core/chrome-extension/dist/app/i18n";
 
 export function usingTestingGlobalContext(children: React.ReactElement, ctx?: Partial<GlobalContextType>) {
   const txtEnvelopeMapping: EnvelopeMapping = {

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as index from "../index";
-import { GitHubPageType } from "../app/github/GitHubPageType";
+import * as index from "@kie-tooling-core/chrome-extension";
+import { GitHubPageType } from "@kie-tooling-core/chrome-extension/dist/app/github/GitHubPageType";
 
 function setWindowLocationPathname(pathname: string) {
   window = Object.create(window);
