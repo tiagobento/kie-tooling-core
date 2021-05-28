@@ -15,7 +15,7 @@
  */
 
 import * as React from "react";
-import { DefaultKeyboardShortcutsService } from "../DefaultKeyboardShortcutsService";
+import { DefaultKeyboardShortcutsService } from "@kie-tooling-core/keyboard-shortcuts/dist/envelope";
 import { OperatingSystem } from "@kie-tooling-core/operating-system";
 import { fireEvent, render } from "@testing-library/react";
 
