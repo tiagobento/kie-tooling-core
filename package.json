@@ -8,22 +8,17 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "build": "lerna run build --stream",
     "build:dev": "lerna run build:dev --stream",
     "build:prod": "lerna run build:prod --stream",
-    "build:productization": "lerna run build:prod --scope=@kie-tooling-core/kie-editors-standalone --include-filtered-dependencies --stream",
-    "test:clearCache": "lerna run test:clearCache --stream",
     "update-version-to": "node ./update_version_to.js",
     "locktt": "locktt",
     "install-locktt": "npm install lock-treatment-tool --global-style --no-package-lock --no-save",
     "npm-tt": "npm-tt",
-    "publish:productization": "lerna exec --scope @kie-tooling-core/* --ignore @kie-tooling-core/online-editor --ignore @kie-tooling-core/desktop --ignore @kie-tooling-core/hub --ignore @kie-tooling-core/pmml-editor -- npm publish --access public",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky install"
   },
   "dependencies": {
-    "monaco-editor": "^0.23.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
