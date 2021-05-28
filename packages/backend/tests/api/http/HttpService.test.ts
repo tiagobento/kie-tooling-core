@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpBridge, HttpResponse, HttpService } from "../../../api";
+import { HttpBridge, HttpResponse, HttpService } from "@kie-tooling-core/backend/dist/api";
 import { DummyHttpService } from "../dummyServices";
 
 let httpService: HttpService;

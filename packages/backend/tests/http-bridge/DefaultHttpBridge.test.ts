@@ -15,7 +15,7 @@
  */
 
 import axios, { AxiosError } from "axios";
-import { DefaultHttpBridge } from "../../http-bridge";
+import { DefaultHttpBridge } from "@kie-tooling-core/backend/dist/http-bridge";
 
 jest.mock("axios");
 const mockAxios = axios as jest.Mocked<typeof axios>;

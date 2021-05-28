@@ -15,7 +15,7 @@
  */
 
 import * as cp from "child_process";
-import * as utils from "../../node";
+import * as utils from "@kie-tooling-core/backend/dist/node";
 import * as sinon from "sinon";
 import * as os from "os";
 

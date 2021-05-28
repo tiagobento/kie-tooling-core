@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { BackendManagerService, BackendProxy, CapabilityResponse, CapabilityResponseStatus } from "../../../api";
+import {
+  BackendManagerService,
+  BackendProxy,
+  CapabilityResponse,
+  CapabilityResponseStatus,
+} from "@kie-tooling-core/backend/dist/api";
 import { createMockedService } from "../dummyServices";
 
 const backendManager = new BackendManagerService({});
