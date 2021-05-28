@@ -15,13 +15,13 @@
  */
 
 import { EditorEnvelopeLocator, ChannelType } from "../../../api";
-import { EnvelopeServer } from "@kogito-tooling/envelope-bus/dist/channel";
+import { EnvelopeServer } from "@kie-tooling-core/envelope-bus/dist/channel";
 import * as React from "react";
 import { File } from "../../../channel";
 import { EmbeddedViewer } from "../../embedded";
 import { incomingMessage } from "./EmbeddedEditorTestUtils";
 import { render } from "@testing-library/react";
-import { EnvelopeBusMessagePurpose } from "@kogito-tooling/envelope-bus/dist/api";
+import { EnvelopeBusMessagePurpose } from "@kie-tooling-core/envelope-bus/dist/api";
 
 describe("EmbeddedViewer::ONLINE", () => {
   const file: File = {

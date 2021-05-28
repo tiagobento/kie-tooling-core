@@ -168,11 +168,11 @@ jobs:
           git checkout ${{ github.event.inputs.kogitoToolingBranchToUpdate }}
           yarn bootstrap
           #
-          yarn add -W @kogito-tooling/bpmn-editor-unpacked@${{ steps.newEditorsVersionOnNpm.outputs.version }} --non-interactive || true
+          yarn add -W @kie-tooling-core/bpmn-editor-unpacked@${{ steps.newEditorsVersionOnNpm.outputs.version }} --non-interactive || true
           while [ -z `git diff | grep 'bpmn-editor-unpacked": "${{ steps.newEditorsVersionOnNpm.outputs.version }}"'` ]; do !!; done # Retry until last command succeeds
-          yarn add -W @kogito-tooling/dmn-editor-unpacked@${{ steps.newEditorsVersionOnNpm.outputs.version }} --non-interactive || true
+          yarn add -W @kie-tooling-core/dmn-editor-unpacked@${{ steps.newEditorsVersionOnNpm.outputs.version }} --non-interactive || true
           while [ -z `git diff | grep 'dmn-editor-unpacked": "${{ steps.newEditorsVersionOnNpm.outputs.version }}"'` ]; do !!; done # Retry until last command succeeds
-          yarn add -W @kogito-tooling/scesim-editor-unpacked@${{ steps.newEditorsVersionOnNpm.outputs.version }} --non-interactive || true
+          yarn add -W @kie-tooling-core/scesim-editor-unpacked@${{ steps.newEditorsVersionOnNpm.outputs.version }} --non-interactive || true
           while [ -z `git diff | grep 'scesim-editor-unpacked": "${{ steps.newEditorsVersionOnNpm.outputs.version }}"'` ]; do !!; done # Retry until last command succeeds
           #
           git config --global user.email "kietooling@gmail.com"

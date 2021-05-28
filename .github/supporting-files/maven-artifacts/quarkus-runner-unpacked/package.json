@@ -1,5 +1,5 @@
 {
-  "name": "@kogito-tooling/quarkus-runner-unpacked",
+  "name": "@kie-tooling-core/quarkus-runner-unpacked",
   "description": "",
   "license": "Apache-2.0",
   "files": [

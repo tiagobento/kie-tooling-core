@@ -1,5 +1,5 @@
 {
-  "name": "@kogito-tooling/bpmn-editor-unpacked",
+  "name": "@kie-tooling-core/bpmn-editor-unpacked",
   "description": "",
   "license": "Apache-2.0",
   "files": [

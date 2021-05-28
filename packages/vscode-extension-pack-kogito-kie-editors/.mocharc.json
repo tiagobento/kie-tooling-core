@@ -1,5 +1,0 @@
-{
-  "reporterOptions": {
-    "output": "./it-tests/results/junit.xml"
-  }
-}

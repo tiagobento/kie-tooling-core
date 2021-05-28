@@ -28,6 +28,10 @@ jest.mock("fs");
 const testPort = 8099;
 const testJarFile = "jar/file/path.jar";
 
+beforeAll(() => {
+  jest.resetAllMocks();
+});
+
 describe("satisfy requirements of the Quarkus local server", () => {
   const service = new QuarkusLocalServer(testJarFile);
   const mockGetPortPromise = jest.spyOn(portfinder, "getPortPromise");

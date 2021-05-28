@@ -19,7 +19,7 @@ const BG_IMAGES_DIRNAME = "bgimages";
 
 /**
  * Two scenarios for nodeModulesDir:
- * (1) When using @kogito-tooling/patternfly-base library as dependency for other projects,
+ * (1) When using @kie-tooling-core/patternfly-base library as dependency for other projects,
  *     __dirname is already on node_modules folder.
  * (2) When developing for kogito-tooling,
  *     patternfly-base is accessed directly so nodeModulesDir needs node_modules appended.

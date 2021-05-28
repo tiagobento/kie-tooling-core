@@ -1,5 +1,5 @@
 {
-  "name": "@kogito-tooling/notifications",
+  "name": "@kie-tooling-core/notifications",
   "version": "0.10.0",
   "description": "",
   "license": "Apache-2.0",
@@ -18,9 +18,8 @@
     "build:prod": "yarn lint && yarn test && rimraf dist && webpack"
   },
   "dependencies": {
-    "@kogito-tooling/i18n": "0.10.0",
-    "@kogito-tooling/i18n-common-dictionary": "0.10.0",
-    "@kogito-tooling/workspace": "0.10.0"
+    "@kie-tooling-core/i18n": "0.10.0",
+    "@kie-tooling-core/workspace": "0.10.0"
   },
   "babel": {
     "presets": [

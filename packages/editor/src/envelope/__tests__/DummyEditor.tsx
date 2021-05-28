@@ -16,8 +16,8 @@
 
 import * as React from "react";
 import { Editor } from "../../api";
-import { DEFAULT_RECT } from "@kogito-tooling/guided-tour/dist/api";
-import { Notification } from "@kogito-tooling/notifications/dist/api";
+import { DEFAULT_RECT } from "@kie-tooling-core/guided-tour/dist/api";
+import { Notification } from "@kie-tooling-core/notifications/dist/api";
 
 export class DummyEditor implements Editor {
   private ref: DummyEditorComponent;
