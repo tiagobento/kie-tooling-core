@@ -3,7 +3,7 @@
   "compilerOptions": {
     "lib": ["es6", "dom", "es2018.promise", "es2019"],
     "module": "CommonJS",
-    "target": "ES2020",
+    "target": "ES5",
     "moduleResolution": "Node",
     "declaration": true,
     "declarationMap": true,

@@ -6,7 +6,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "resources"
   ],
   "repository": {
     "type": "git",
@@ -17,7 +18,9 @@
     "@kie-tooling-core/i18n": "0.10.0",
     "@octokit/rest": "^18.5.3",
     "@types/chrome": "^0.0.137",
-    "minimatch": "^3.0.4"
+    "minimatch": "^3.0.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint -c 'yarn eslint ./src --ext .ts,.tsx'",

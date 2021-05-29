@@ -16,6 +16,10 @@
     "build:dev": "rimraf dist && tsc -p tsconfig.dev.json",
     "build:prod": "yarn lint && rimraf dist && tsc -p tsconfig.prod.json && yarn test"
   },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "babel": {
     "presets": [
       [

@@ -4,26 +4,31 @@
   "description": "Guided Tour component",
   "license": "Apache-2.0",
   "source": "src/index.tsx",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint -c 'yarn eslint ./src --ext .ts,.tsx'",
     "test": "run-script-if --env KOGITO_TOOLING_BUILD_test -c 'jest --silent --verbose'",
-    "copy:css": "mkdir -p dist && cp -r ./static/css ./dist/css",
+    "copy:css": "copyfiles -u 1 src/**/*.{sass,scss,css} dist/",
     "build:dev": "rimraf dist && yarn copy:css && tsc -p tsconfig.dev.json",
     "build:prod": "yarn lint && rimraf dist && yarn copy:css && tsc -p tsconfig.prod.json && yarn test"
   },
-  "peerDependencies": {
+  "dependencies": {
+    "@kie-tooling-core/envelope-bus": "0.10.0",
+    "@kie-tooling-core/i18n": "0.10.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
-  "dependencies": {
-    "@kie-tooling-core/envelope-bus": "0.10.0",
-    "@kie-tooling-core/i18n": "0.10.0"
-  },
   "presets": [
-    "@babel/preset-env",
-    "@babel/preset-react"
-  ],
-  "files": [
-    "dist"
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/react"
   ]
 }

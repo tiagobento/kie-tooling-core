@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@kie-tooling-core/operating-system": "0.10.0",
-    "@kie-tooling-core/envelope-bus": "0.10.0"
+    "@kie-tooling-core/envelope-bus": "0.10.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint -c 'yarn eslint ./src --ext .ts,.tsx'",
