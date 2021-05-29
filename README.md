@@ -50,7 +50,7 @@ In Kogito Tooling [releases page](https://github.com/kiegroup/kogito-tooling/rel
    > If you don't have a GitHub account use this command instead:
    >
    > ```
-   > git clone https://github.com/kiegroup/kogito-tooling.git
+   > git clone https://github.com/kiegroup/kie-tooling-core.git
    > ```
 
 1. Build with Yarn:

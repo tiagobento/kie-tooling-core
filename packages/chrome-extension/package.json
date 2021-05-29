@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiegroup/kogito-tooling.git"
+    "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "dependencies": {
     "@kie-tooling-core/editor": "0.10.0",

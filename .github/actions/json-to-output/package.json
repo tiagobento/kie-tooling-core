@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kiegroup/kogito-tooling.git"
+    "url": "git+https://github.com/kiegroup/kie-tooling-core.git"
   },
   "author": "",
   "license": "Apache-2.0",

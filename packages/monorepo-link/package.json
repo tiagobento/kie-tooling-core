@@ -1,12 +1,17 @@
 {
-  "name": "@kie-tooling-core/scesim-editor-unpacked",
+  "name": "@kie-tooling-core/monorepo-link",
+  "version": "0.10.0",
   "description": "",
   "license": "Apache-2.0",
   "files": [
-    "target/scesim"
+    "index.js"
   ],
+  "bin": "./index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/kiegroup/kie-tooling-core.git"
+  },
+  "dependencies": {
+    "yargs": "^17.0.1"
   }
 }
