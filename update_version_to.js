@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-const fs = require("fs");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-const CHROME_EXTENSION_MANIFEST_DEV_JSON = "./packages/chrome-extension-pack-kogito-kie-editors/manifest.dev.json";
-const CHROME_EXTENSION_MANIFEST_PROD_JSON = "./packages/chrome-extension-pack-kogito-kie-editors/manifest.prod.json";
 const LERNA_JSON = "./lerna.json";
 
 //
@@ -27,14 +24,6 @@ const LERNA_JSON = "./lerna.json";
 async function updatePackages(lernaVersionArg) {
   await exec(`yarn lerna version ${lernaVersionArg} --no-push --no-git-tag-version --exact --yes`);
   return require(LERNA_JSON).version;
-}
-
-async function updateChromeExtensionManifest(version, manifestPath) {
-  const manifest = require(manifestPath);
-  manifest.version = version;
-
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest));
-  return version;
 }
 
 // MAIN
@@ -51,8 +40,6 @@ function red(str) {
 
 Promise.resolve()
   .then(() => updatePackages(lernaVersionArg))
-  .then((version) => updateChromeExtensionManifest(version, CHROME_EXTENSION_MANIFEST_DEV_JSON))
-  .then((version) => updateChromeExtensionManifest(version, CHROME_EXTENSION_MANIFEST_PROD_JSON))
   .then(async (version) => {
     await exec(`npm run format`);
     return version;
