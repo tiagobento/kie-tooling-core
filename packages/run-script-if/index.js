@@ -96,13 +96,13 @@ async function main() {
   );
 
   if (commandsToRun.length > 0) {
-    log(argv, console.info, `Running ${commandsToRun.length} commands(s): ['${commandsToRun.join("', '")}']`);
+    log(argv, console.info, `Running ${commandsToRun.length} command(s): ['${commandsToRun.join("', '")}']`);
   } else {
     log(argv, console.info, `Running 0 command(s)`);
   }
 
   if (commandsToSkip.length > 0) {
-    log(argv, console.info, `Skipping ${commandsToSkip.length} commands(s): ['${commandsToSkip.join("', '")}']`);
+    log(argv, console.info, `Skipping ${commandsToSkip.length} command(s): ['${commandsToSkip.join("', '")}']`);
   }
 
   let nCommandsFinished = 0;
@@ -139,7 +139,7 @@ function log(argv, logFunction, ...args) {
     return;
   }
 
-  logFunction(`[run-script-if] `, ...args);
+  logFunction(`[run-script-if]`, ...args);
 }
 
 function logCommandError(argv, commandsToRun, nCommandsFinished, cmd) {
