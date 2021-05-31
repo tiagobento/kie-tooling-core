@@ -21,89 +21,141 @@ const { hideBin } = require("yargs/helpers");
 const { spawn } = require("child_process");
 
 async function main() {
-  const argv = yargs(hideBin(process.argv)).options({
-    env: {
-      required: true,
-      alias: "e",
-      type: "string",
-      description: "Environment variable name",
-    },
-    eq: {
-      default: "true",
-      alias: "equals",
-      type: "string",
-      description: "Value to be compared with the environment variable.",
-    },
-    command: {
-      array: true,
-      required: true,
-      alias: "c",
-      type: "string",
-      description: "Command to execute if environment variable has the desired value",
-    },
-    "run-if-empty": {
-      default: "true",
-      description: "Runs the command if the environment variable is not set.",
-    },
-  }).argv;
+  const argv = yargs(hideBin(process.argv))
+    .strict()
+    .options({
+      env: {
+        required: true,
+        alias: "e",
+        type: "string",
+        description: "Environment variable name",
+      },
+      eq: {
+        default: "true",
+        alias: "equals",
+        type: "string",
+        description: "Value to be compared with the environment variable.",
+      },
+      then: {
+        array: true,
+        required: true,
+        type: "string",
+        description: "Command to execute if environment variable has the desired value",
+      },
+      else: {
+        default: [],
+        array: true,
+        required: false,
+        type: "string",
+        description: "Command to execute if environment variable doesn't have the desired value",
+      },
+      "true-if-empty": {
+        default: false,
+        type: "boolean",
+        description: "Runs the command if the environment variable is not set.",
+      },
+      silent: {
+        default: false,
+        type: "boolean",
+        description: "Doesn't output any logs.",
+      },
+    }).argv;
 
-  const nCommands = argv.c.length;
-  const formattedCommandsToLog = `'${argv.c.join("', '")}'`;
+  const envVariableName = argv.env;
+  const envVariableValue = process.env[envVariableName];
+  const shouldRunIfEmpty = argv["true-if-empty"];
 
-  if (process.env[argv.env] && process.env[argv.env] !== argv.eq) {
-    console.info(
-      `[run-script-if] Skipping ${nCommands} command(s): ${formattedCommandsToLog}. Environment variable '${argv.env}' is not equal to '${argv.eq}'.`
-    );
-    process.exit(0);
-  }
-
-  if (!process.env[argv.env] && argv["run-if-empty"] !== "true") {
-    console.info(
-      `[run-script-if] Skipping ${nCommands} command(s):${formattedCommandsToLog}. Environment variable '${argv.env}' is not set and --run-if-empty is "${argv["run-if-empty"]}".`
-    );
-    process.exit(0);
-  }
-
-  if (!process.env[argv.env]) {
-    console.info(
-      `[run-script-if] Running ${nCommands} command(s): ${formattedCommandsToLog}. Environment variable '${argv.env}' is not set and --run-if-empty is "${argv["run-if-empty"]}".`
-    );
+  let commandsToRun;
+  let commandsToSkip;
+  if ((!envVariableValue || envVariableValue === "") && shouldRunIfEmpty) {
+    commandsToRun = argv.then;
+    commandsToSkip = argv.else;
+  } else if (envVariableValue === argv.eq) {
+    commandsToRun = argv.then;
+    commandsToSkip = argv.else;
   } else {
-    console.info(
-      `[run-script-if] Running ${nCommands} commands(s): ${formattedCommandsToLog}. Environment variable '${argv.env}' is equal to '${argv.eq}'.`
-    );
+    commandsToRun = argv.else;
+    commandsToSkip = argv.then;
+  }
+
+  let envVariableValueToLog;
+  if (envVariableValue === "") {
+    envVariableValueToLog = `not set ("")`;
+  } else if (envVariableValue === undefined) {
+    envVariableValueToLog = "not set";
+  } else {
+    envVariableValueToLog = envVariableValue;
+  }
+
+  log(
+    argv,
+    console.info,
+    `Environment variable '${envVariableName}' is ${envVariableValueToLog} and --true-if-empty is ${
+      shouldRunIfEmpty ? "enabled" : "disabled"
+    }.`
+  );
+
+  if (commandsToRun.length > 0) {
+    log(argv, console.info, `Running ${commandsToRun.length} commands(s): ['${commandsToRun.join("', '")}']`);
+  } else {
+    log(argv, console.info, `Running 0 command(s)`);
+  }
+
+  if (commandsToSkip.length > 0) {
+    log(argv, console.info, `Skipping ${commandsToSkip.length} commands(s): ['${commandsToSkip.join("', '")}']`);
   }
 
   let nCommandsFinished = 0;
-
-  for (const c of argv.c) {
+  for (const commandString of commandsToRun) {
     await new Promise((res, rej) => {
-      let commandBin = c.split(" ")[0];
-      let commandArgs = c.split(" ").slice(1);
+      const commandBin = commandString.split(" ")[0];
+      const commandArgs = commandString.split(" ").slice(1);
 
-      console.info(`[run-script-if] Running '${c}'`);
-
+      log(argv, console.info, `Running '${commandString}'`);
       const command = spawn(commandBin, commandArgs, { stdio: "inherit" });
+
       command.on("error", (data) => {
-        console.error(`[run-script-if] Error executing '${c}':`);
-        console.error(data.toString());
-        rej(1);
+        logCommandError(argv, commandsToRun, nCommandsFinished, commandString);
+        rej({ code: 1, msg: data.toString() });
       });
 
       command.on("exit", (code) => {
         if (code !== 0) {
-          rej(code);
+          logCommandError(argv, commandsToRun, nCommandsFinished, commandString);
+          rej({ code });
           return;
         }
 
         nCommandsFinished += 1;
-        console.info(`[run-script-if] Finished '${c}'`);
+        log(argv, console.info, `Finished '${commandString}'`);
         res();
       });
     });
   }
 }
 
-main().catch((code) => {
-  process.exit(code);
+function log(argv, logFunction, ...args) {
+  if (argv.silent) {
+    return;
+  }
+
+  logFunction(`[run-script-if] `, ...args);
+}
+
+function logCommandError(argv, commandsToRun, nCommandsFinished, cmd) {
+  const n = commandsToRun.length - nCommandsFinished - 1;
+  if (n > 0) {
+    const skipped = commandsToRun.splice(nCommandsFinished + 1).join("', '");
+    log(argv, console.error, `Error executing '${cmd}'. Stopping and skipping ${n} command(s): ['${skipped}']`);
+  } else {
+    log(argv, console.error, `Error executing '${cmd}'.`);
+  }
+}
+
+main().catch((err) => {
+  if (err.msg) {
+    console.error(err.msg);
+  }
+
+  process.exit(err.code);
 });
