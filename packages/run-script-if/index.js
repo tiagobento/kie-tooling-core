@@ -61,96 +61,121 @@ async function main() {
       },
     }).argv;
 
-  const envVariableName = argv.env;
-  const envVariableValue = process.env[envVariableName];
+  const log = (logFunction, ...args) => {
+    if (!argv.silent) {
+      logFunction(`[run-script-if]`, ...args);
+    }
+  };
+
+  const envVarName = argv.env;
+  const envVarValue = process.env[envVarName];
   const shouldRunIfEmpty = argv["true-if-empty"];
 
-  let commandsToRun;
-  let commandsToSkip;
-  if ((!envVariableValue || envVariableValue === "") && shouldRunIfEmpty) {
-    commandsToRun = argv.then;
-    commandsToSkip = argv.else;
-  } else if (envVariableValue === argv.eq) {
-    commandsToRun = argv.then;
-    commandsToSkip = argv.else;
+  const condition =
+    // env var value is logically empty and --true-if-empty is enabled
+    ((envVarValue === undefined || envVarValue === "") && shouldRunIfEmpty) ||
+    // env var value is equal to the --eq argument
+    envVarValue === argv.eq;
+
+  let commandStringsToRun;
+  let commandStringsToSkip;
+
+  if (condition) {
+    commandStringsToRun = argv.then;
+    commandStringsToSkip = argv.else;
   } else {
-    commandsToRun = argv.else;
-    commandsToSkip = argv.then;
+    commandStringsToRun = argv.else;
+    commandStringsToSkip = argv.then;
   }
 
-  let envVariableValueToLog;
-  if (envVariableValue === "") {
-    envVariableValueToLog = `not set ("")`;
-  } else if (envVariableValue === undefined) {
-    envVariableValueToLog = "not set";
+  log(console.info, LOGS.envVarSummary(envVarName, envVarValue, shouldRunIfEmpty));
+
+  if (commandStringsToRun.length > 0) {
+    log(console.info, LOGS.running(commandStringsToRun));
   } else {
-    envVariableValueToLog = `'${envVariableValue}'`;
+    log(console.info, LOGS.runningZero());
   }
 
-  log(
-    argv,
-    console.info,
-    `Environment variable '${envVariableName}' is ${envVariableValueToLog} and --true-if-empty is ${
-      shouldRunIfEmpty ? "enabled" : "disabled"
-    }.`
-  );
-
-  if (commandsToRun.length > 0) {
-    log(argv, console.info, `Running ${commandsToRun.length} command(s): ['${commandsToRun.join("', '")}']`);
-  } else {
-    log(argv, console.info, `Running 0 command(s)`);
-  }
-
-  if (commandsToSkip.length > 0) {
-    log(argv, console.info, `Skipping ${commandsToSkip.length} command(s): ['${commandsToSkip.join("', '")}']`);
+  if (commandStringsToSkip.length > 0) {
+    log(console.info, LOGS.skipping(commandStringsToSkip));
   }
 
   let nCommandsFinished = 0;
-  for (const commandString of commandsToRun) {
+  for (const runningCommandString of commandStringsToRun) {
     await new Promise((res, rej) => {
-      const commandBin = commandString.split(" ")[0];
-      const commandArgs = commandString.split(" ").slice(1);
+      log(console.info, LOGS.runningCommand(runningCommandString));
 
-      log(argv, console.info, `Running '${commandString}'`);
-      const command = spawn(commandBin, commandArgs, { stdio: "inherit" });
+      const bin = runningCommandString.split(" ")[0];
+      const args = runningCommandString.split(" ").slice(1);
+      const command = spawn(bin, args, { stdio: "inherit" });
 
       command.on("error", (data) => {
-        logCommandError(argv, commandsToRun, nCommandsFinished, commandString);
+        logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString);
         rej({ code: 1, msg: data.toString() });
       });
 
       command.on("exit", (code) => {
         if (code !== 0) {
-          logCommandError(argv, commandsToRun, nCommandsFinished, commandString);
+          logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString);
           rej({ code });
           return;
         }
 
         nCommandsFinished += 1;
-        log(argv, console.info, `Finished '${commandString}'`);
+        log(console.info, LOGS.finishCommand(runningCommandString));
         res();
       });
     });
   }
 }
 
-function log(argv, logFunction, ...args) {
-  if (argv.silent) {
-    return;
-  }
-
-  logFunction(`[run-script-if]`, ...args);
-}
-
-function logCommandError(argv, commandsToRun, nCommandsFinished, cmd) {
-  const n = commandsToRun.length - nCommandsFinished - 1;
-  if (n > 0) {
-    const skipped = commandsToRun.splice(nCommandsFinished + 1).join("', '");
-    log(argv, console.error, `Error executing '${cmd}'. Stopping and skipping ${n} command(s): ['${skipped}']`);
+function logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString) {
+  const commandsLeft = commandStringsToRun.length - nCommandsFinished - 1;
+  if (commandsLeft > 0) {
+    const skippedCommands = commandStringsToRun.splice(nCommandsFinished + 1);
+    log(console.error, LOGS.errorOnMiddleCommand(runningCommandString, commandsLeft, skippedCommands));
   } else {
-    log(argv, console.error, `Error executing '${cmd}'.`);
+    log(console.error, LOGS.errorOnLastCommand(runningCommandString));
   }
 }
+
+const LOGS = {
+  runningCommand: (commandString) => {
+    return `Running '${commandString}'`;
+  },
+  finishCommand: (commandString) => {
+    return `Finished '${commandString}'`;
+  },
+  runningZero: () => {
+    return `Running 0 command(s)`;
+  },
+  errorOnLastCommand: (cmd) => {
+    return `Error executing '${cmd}'.`;
+  },
+  skipping: (commandStrings) => {
+    return `Skipping ${commandStrings.length} command(s): ['${commandStrings.join("', '")}']`;
+  },
+  running: (commandStrings) => {
+    return `Running ${commandStrings.length} command(s): ['${commandStrings.join("', '")}']`;
+  },
+  errorOnMiddleCommand: (commandString, commandsLeft, skippedCommandStrings) => {
+    const skippedCommandStringsLog = `'${skippedCommandStrings.join("', '")}'`;
+    return `Error executing '${commandString}'. Stopping and skipping ${commandsLeft} command(s): [${skippedCommandStringsLog}]`;
+  },
+  envVarSummary: (envVarName, envVarValue, shouldRunIfEmpty) => {
+    let envVarValueLog;
+    if (envVarValue === "") {
+      envVarValueLog = `not set ("")`;
+    } else if (envVarValue === undefined) {
+      envVarValueLog = "not set";
+    } else {
+      envVarValueLog = `'${envVarValue}'`;
+    }
+
+    const trueIfEmptyLog = shouldRunIfEmpty ? "enabled" : "disabled";
+    return `Environment variable '${envVarName}' is ${envVarValueLog} and --true-if-empty is ${trueIfEmptyLog}.`;
+  },
+};
 
 main().catch((err) => {
   if (err.msg) {
