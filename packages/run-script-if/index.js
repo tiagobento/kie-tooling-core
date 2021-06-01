@@ -57,7 +57,12 @@ async function main() {
       silent: {
         default: false,
         type: "boolean",
-        description: "Doesn't output any logs.",
+        description: "Hide logs from output.",
+      },
+      force: {
+        default: false,
+        type: "boolean",
+        description: "Runs commands supplied to --then regardless of the environment variable value.",
       },
     }).argv;
 
@@ -75,7 +80,9 @@ async function main() {
     // env var value is logically empty and --true-if-empty is enabled
     ((envVarValue === undefined || envVarValue === "") && shouldRunIfEmpty) ||
     // env var value is equal to the --eq argument
-    envVarValue === argv.eq;
+    envVarValue === argv.eq ||
+    // env var value is ignored and the --then commands are executed
+    argv.force;
 
   let commandStringsToRun;
   let commandStringsToSkip;
@@ -143,11 +150,11 @@ const LOGS = {
   runningCommand: (commandString) => {
     return `Running '${commandString}'`;
   },
+  runningZero: () => {
+    return `No commands to run.`;
+  },
   finishCommand: (commandString) => {
     return `Finished '${commandString}'`;
-  },
-  runningZero: () => {
-    return `Running 0 command(s)`;
   },
   errorOnLastCommand: (cmd) => {
     return `Error executing '${cmd}'.`;
