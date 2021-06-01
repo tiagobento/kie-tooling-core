@@ -84,7 +84,7 @@ async function main() {
   } else if (envVariableValue === undefined) {
     envVariableValueToLog = "not set";
   } else {
-    envVariableValueToLog = envVariableValue;
+    envVariableValueToLog = `'${envVariableValue}'`;
   }
 
   log(
