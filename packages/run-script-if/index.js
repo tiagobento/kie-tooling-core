@@ -113,7 +113,10 @@ async function main() {
       log(console.info, LOGS.runningCommand(runningCommandString));
 
       const bin = runningCommandString.split(" ")[0];
-      const args = runningCommandString.split(" ").slice(1);
+      const args = runningCommandString
+        .split(" ")
+        .slice(1)
+        .filter((arg) => arg.trim().length > 0);
       const command = spawn(bin, args, { stdio: "inherit" });
 
       command.on("error", (data) => {
