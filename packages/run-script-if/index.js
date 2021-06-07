@@ -108,17 +108,20 @@ async function main() {
 
   await runCommandStrings(log, argv, commandStringsToRun)
     .catch(async (e) => {
-      console.error(e.msg);
+      if (e.msg) {
+        console.error(e.msg);
+      }
 
       const catchCommands = argv.catch;
       if (catchCommands.length <= 0) {
-        return;
+        throw e;
       }
 
       log(console.error, LOGS.runningCatchCommands());
       await runCommandStrings(log, argv, catchCommands).catch((err) => {
         console.error(err.msg);
       });
+
       throw e;
     })
     .finally(async () => {
