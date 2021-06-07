@@ -40,19 +40,19 @@ async function main() {
         array: true,
         required: true,
         type: "string",
-        description: "Command to execute if environment variable has the desired value",
+        description: "Command(s) to execute if environment variable has the desired value",
       },
       else: {
         default: [],
         array: true,
         required: false,
         type: "string",
-        description: "Command to execute if environment variable doesn't have the desired value",
+        description: "Command(s) to execute if environment variable doesn't have the desired value",
       },
       "true-if-empty": {
         default: false,
         type: "boolean",
-        description: "Runs the command if the environment variable is not set.",
+        description: "If the environment variable is not set, the command(s) supplied to --then will run.",
       },
       silent: {
         default: false,
@@ -62,7 +62,22 @@ async function main() {
       force: {
         default: false,
         type: "boolean",
-        description: "Runs commands supplied to --then regardless of the environment variable value.",
+        description: "Runs command(s) supplied to --then regardless of the environment variable value.",
+      },
+      catch: {
+        default: [],
+        array: true,
+        required: false,
+        type: "string",
+        description: "Command(s) to execute at the end of execution if one of the commands being executed fails.",
+      },
+      finally: {
+        default: [],
+        array: true,
+        required: false,
+        type: "string",
+        description:
+          "Command(s) to execute at the end of execution. Provided commands will run even if one of the commands being executed fails.",
       },
     }).argv;
 
@@ -84,40 +99,53 @@ async function main() {
     // env var value is ignored and the --then commands are executed
     argv.force;
 
-  let commandStringsToRun;
-  let commandStringsToSkip;
+  const commandStringsToRun = condition ? argv.then : argv.else;
 
-  if (condition) {
-    commandStringsToRun = argv.then;
-    commandStringsToSkip = argv.else;
-  } else {
-    commandStringsToRun = argv.else;
-    commandStringsToSkip = argv.then;
-  }
+  log(console.info, LOGS.envVarSummary(envVarName, envVarValue));
+  if (shouldRunIfEmpty) log(console.info, LOGS.trueIfEmptyEnabled());
+  if (argv.force) log(console.info, LOGS.forceEnabled());
+  log(console.info, LOGS.conditionSummary(condition));
 
-  log(console.info, LOGS.envVarSummary(envVarName, envVarValue, shouldRunIfEmpty));
+  await runCommandStrings(log, argv, commandStringsToRun)
+    .catch(async (e) => {
+      console.error(e.msg);
 
+      const catchCommands = argv.catch;
+      if (catchCommands.length <= 0) {
+        return;
+      }
+
+      log(console.error, LOGS.runningCatchCommands());
+      await runCommandStrings(log, argv, catchCommands).catch((err) => {
+        console.error(err.msg);
+      });
+      throw e;
+    })
+    .finally(async () => {
+      let finallyCommands = argv.finally;
+      if (finallyCommands.length <= 0) {
+        return;
+      }
+
+      log(console.error, LOGS.runningFinallyCommands());
+      await runCommandStrings(log, argv, finallyCommands).catch((err) => {
+        console.error(err.msg);
+      });
+    });
+}
+
+async function runCommandStrings(log, argv, commandStringsToRun) {
   if (commandStringsToRun.length > 0) {
     log(console.info, LOGS.running(commandStringsToRun));
   } else {
     log(console.info, LOGS.runningZero());
   }
 
-  if (commandStringsToSkip.length > 0) {
-    log(console.info, LOGS.skipping(commandStringsToSkip));
-  }
-
   let nCommandsFinished = 0;
   for (const runningCommandString of commandStringsToRun) {
     await new Promise((res, rej) => {
       log(console.info, LOGS.runningCommand(runningCommandString));
-
-      const bin = runningCommandString.split(" ")[0];
-      const args = runningCommandString
-        .split(" ")
-        .slice(1)
-        .filter((arg) => arg.trim().length > 0);
-      const command = spawn(bin, args, { stdio: "inherit" });
+      const command = spawnCommandString(runningCommandString);
 
       command.on("error", (data) => {
         logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString);
@@ -139,6 +167,15 @@ async function main() {
   }
 }
 
+function spawnCommandString(commandString) {
+  const bin = commandString.split(" ")[0];
+  const args = commandString
+    .split(" ")
+    .slice(1)
+    .filter((arg) => arg.trim().length > 0);
+  return spawn(bin, args, { stdio: "inherit" });
+}
+
 function logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString) {
   const commandsLeft = commandStringsToRun.length - nCommandsFinished - 1;
   if (commandsLeft > 0) {
@@ -156,6 +193,12 @@ const LOGS = {
   runningZero: () => {
     return `No commands to run.`;
   },
+  runningFinallyCommands: () => {
+    return `Execution finished. Running _finally_ command(s).`;
+  },
+  runningCatchCommands: () => {
+    return `There are errors. Running _catch_ command(s).`;
+  },
   finishCommand: (commandString) => {
     return `Finished '${commandString}'`;
   },
@@ -172,7 +215,7 @@ const LOGS = {
     const skippedCommandStringsLog = `'${skippedCommandStrings.join("', '")}'`;
     return `Error executing '${commandString}'. Stopping and skipping ${commandsLeft} command(s): [${skippedCommandStringsLog}]`;
   },
-  envVarSummary: (envVarName, envVarValue, shouldRunIfEmpty) => {
+  envVarSummary: (envVarName, envVarValue) => {
     let envVarValueLog;
     if (envVarValue === "") {
       envVarValueLog = `not set ("")`;
@@ -182,15 +225,20 @@ const LOGS = {
       envVarValueLog = `'${envVarValue}'`;
     }
 
-    const trueIfEmptyLog = shouldRunIfEmpty ? "enabled" : "disabled";
-    return `Environment variable '${envVarName}' is ${envVarValueLog} and --true-if-empty is ${trueIfEmptyLog}.`;
+    return `Environment variable '${envVarName}' is ${envVarValueLog}.`;
+  },
+  trueIfEmptyEnabled: () => {
+    return `--true-if-empty is enabled.`;
+  },
+  forceEnabled: () => {
+    return `--force is enabled.`;
+  },
+  conditionSummary: (condition) => {
+    const clause = condition ? "_then_" : "_else_";
+    return `Condition is '${condition}'. Running ${clause} command(s).`;
   },
 };
 
-main().catch((err) => {
-  if (err.msg) {
-    console.error(err.msg);
-  }
-
-  process.exit(err.code);
+main().catch((e) => {
+  process.exit(e.code);
 });
