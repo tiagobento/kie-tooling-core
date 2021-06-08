@@ -22,23 +22,17 @@ import { useEffect, useState } from "react";
 import { Brand, Nav, NavItem, NavList, Page, PageHeader } from "@patternfly/react-core";
 import { HashRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Base64PngPage } from "./Pages/Base64Png/Base64PngPage";
-import { BpmnPage } from "./Pages/KogitoEditors/BpmnPage";
-import { DmnPage } from "./Pages/KogitoEditors/DmnPage";
 import { TodoListViewPage } from "./Pages/TodoList/TodoListViewPage";
 import { PingPongIFrameViewsPage } from "./Pages/PingPong/PingPongIFrameViewsPage";
 import { PingPongDivViewsPage } from "./Pages/PingPong/PingPongDivViewsPage";
 import { Home } from "./Home";
 import "../static/resources/styles.css";
-import { DmnStandaloneEditorPage } from "./Pages/StandaloneEditors/DmnStandaloneEditorPage";
 
 enum Location {
-  BPMN = "/editor/bpmn",
-  DMN = "/editor/dmn",
   BASE46PNG = "/editor/base64png",
   TODO_LIST = "/page/todo-list",
   PING_PONG_IFRAME_PAGES = "/page/ping-pong-iframe-pages",
   PING_PONG_DIV_PAGES = "/page/ping-pong-div-pages",
-  STANDALONE_EDITORS = "/page/standalone-editors",
   HOME = "/",
 }
 
@@ -70,12 +64,6 @@ export function App() {
                   <NavItem itemId={Location.BASE46PNG} isActive={location === Location.BASE46PNG}>
                     <Link to={Location.BASE46PNG}>Base64 PNG Editor</Link>
                   </NavItem>
-                  <NavItem itemId={Location.BPMN} isActive={location === Location.BPMN}>
-                    <Link to={Location.BPMN}>BPMN Editor</Link>
-                  </NavItem>
-                  <NavItem itemId={Location.DMN} isActive={location === Location.DMN}>
-                    <Link to={Location.DMN}>DMN Editor</Link>
-                  </NavItem>
                   <NavItem itemId={Location.TODO_LIST} isActive={location === Location.TODO_LIST}>
                     <Link to={Location.TODO_LIST}>'To do' list View</Link>
                   </NavItem>
@@ -84,9 +72,6 @@ export function App() {
                   </NavItem>
                   <NavItem itemId={Location.PING_PONG_DIV_PAGES} isActive={location === Location.PING_PONG_DIV_PAGES}>
                     <Link to={Location.PING_PONG_DIV_PAGES}>Ping-Pong Div Views</Link>
-                  </NavItem>
-                  <NavItem itemId={Location.STANDALONE_EDITORS} isActive={location === Location.STANDALONE_EDITORS}>
-                    <Link to={Location.STANDALONE_EDITORS}>DMN Standalone Editor</Link>
                   </NavItem>
                 </NavList>
               </Nav>
@@ -101,12 +86,6 @@ export function App() {
           <Route path={Location.BASE46PNG}>
             <Base64PngPage />
           </Route>
-          <Route path={Location.BPMN}>
-            <BpmnPage />
-          </Route>
-          <Route path={Location.DMN}>
-            <DmnPage />
-          </Route>
           <Route path={Location.TODO_LIST}>
             <TodoListViewPage />
           </Route>
@@ -115,9 +94,6 @@ export function App() {
           </Route>
           <Route path={Location.PING_PONG_DIV_PAGES}>
             <PingPongDivViewsPage />
-          </Route>
-          <Route path={Location.STANDALONE_EDITORS}>
-            <DmnStandaloneEditorPage />
           </Route>
         </Switch>
       </Page>

@@ -4,7 +4,7 @@ You can read [here](https://blog.kie.org/2020/10/kogito-tooling-examples%e2%80%8
 
 This is a Web application example that shows how to integrate an Embedded Editor [1] or an Embedded Envelope [2]
 
-1. The Embedded Editor enables you to use your Custom Editors or even to use the available Kogito Editor (BPMN and DMN)
+1. The Embedded Editor enables you to use your Custom Editors.
 1. The Embedded Envelope gives you more flexibility to create any kind of application, in this example we bring two custom Views.
 
 ## Details
@@ -12,8 +12,6 @@ This is a Web application example that shows how to integrate an Embedded Editor
 To get more the details please take a look on each implementation:
 
 - [Base64 PNG Editor]("src/Pages/Base64Png/Base64PngPage.tsx")
-- [BPMN Editor]("src/Pages/KogitoEditors/BpmnPage.tsx")
-- [DMN Editor]("src/Pages/KogitoEditors/DmnPage.tsx")
 - ['To-do' list View]("src/Pages/TodoList/TodoListViewPage.tsx")
 - [Ping-Pong View]("src/Pages/PingPong/PingPongViewsPage.tsx")
 

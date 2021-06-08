@@ -25,7 +25,6 @@ module.exports = [
   entry: {
     index: "./src/index.tsx",
     "envelope/base64-editor": "./src/envelope/base64-editor.ts",
-    "envelope/gwt-editors": "./src/envelope/gwt-editors.ts",
     "envelope/ping-pong-view-react-impl": "./src/envelope/ping-pong-view-react-impl.ts",
     "envelope/todo-list-view": "./src/envelope/todo-list-view.ts",
   },
@@ -35,7 +34,6 @@ module.exports = [
     publicPath: "/",
   },
   stats: {
-    excludeAssets: [(name) => !name.endsWith(".js"), /gwt-editors\/.*/, /editors\/.*/],
     excludeModules: true,
     warningsFilter: [
         'Failed to parse source map from'
@@ -68,7 +66,6 @@ module.exports = [
       patterns: [
         { from: "./envelope", to: "./envelope" },
         { from: "./static", to: "." },
-        { from: "../../node_modules/@kogito-tooling/dmn-editor-unpacked/target/dmn", to: "./gwt-editors/dmn" },
       ],
     }),
   ],
