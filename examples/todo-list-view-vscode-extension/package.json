@@ -1,0 +1,72 @@
+{
+  "name": "example-todo-list-view-vscode-extension",
+  "version": "0.0.4",
+  "private": true,
+  "publisher": "kie-tooling-core-examples",
+  "displayName": "Todo List View :: Kogito Examples ",
+  "description": "",
+  "main": "./dist/extension.js",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiegroup/kogito-tooling-examples.git"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "scripts": {
+    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
+    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose --passWithNoTests'",
+    "pack-extension": "vsce package --yarn -o ./dist/kogito_tooling_examples_todo_list_view_$npm_package_version.vsix",
+    "compile": "yarn run build:dev",
+    "watch": "yarn run build:dev",
+    "build:dev": "rimraf dist && webpack",
+    "build:prod": "rimraf dist && webpack && yarn run pack-extension"
+  },
+  "contributes": {
+    "menus": {
+      "editor/context": [
+        {
+          "command": "kogito-tooling-examples.todo-list-view.add-item"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "kogito-tooling-examples.todo-list-view",
+        "title": "Open list",
+        "category": "TODO"
+      },
+      {
+        "command": "kogito-tooling-examples.todo-list-view.add-item",
+        "title": "TODO: Add item(s)"
+      },
+      {
+        "command": "kogito-tooling-examples.todo-list-view.mark-all-as-completed",
+        "title": "Mark all as completed",
+        "category": "TODO"
+      }
+    ]
+  },
+  "dependencies": {
+    "@kie-tooling-core-examples/todo-list-view": "0.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@types/vscode": "^1.46.0",
+    "vsce": "^1.93.0",
+    "vscode-test": "^1.5.2",
+    "css-loader": "^5.2.4",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.2",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
+  }
+}
