@@ -21,7 +21,7 @@
     "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
     "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose'",
     "build:dev": "rimraf dist && tsc -p tsconfig.dev.json",
-    "build:prod": "yarn lint && rimraf dist && tsc -p tsconfig.prod.json && yarn test "
+    "build:prod": "yarn lint && rimraf dist && tsc -p tsconfig.prod.json && yarn test"
   },
   "babel": {
     "presets": [

@@ -1,0 +1,129 @@
+{
+  "name": "example-base64png-editor-vscode-extension",
+  "version": "0.0.4",
+  "private": true,
+  "displayName": "Kogito Base64 PNG Editor",
+  "publisher": "kie-tooling-core-examples",
+  "description": "",
+  "main": "./dist/extension.js",
+  "license": "Apache-2.0",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiegroup/kogito-tooling-examples.git"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCustomEditor:kieKogitoWebviewBase64PNGEditor",
+    "onCommand:extension.kogito.createBase64Png"
+  ],
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "kieKogitoWebviewBase64PNGEditor",
+        "displayName": "Kogito Base64Png React Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.base64png"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "extension.kogito.createBase64Png",
+        "title": "Create Base64 PNG",
+        "icon": {
+          "light": "./static/kogito-logo-128x128.png",
+          "dark": "./static/kogito-logo-128x128.png"
+        }
+      },
+      {
+        "command": "extension.kogito.getPreviewSvg",
+        "title": "Save Preview SVG",
+        "icon": {
+          "light": "./static/svg-icon-light.png",
+          "dark": "./static/svg-icon-dark.png"
+        }
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "when": "resourceLangId == png",
+          "command": "extension.kogito.createBase64Png"
+        },
+        {
+          "when": "resourceLangId == base64png",
+          "command": "extension.kogito.getPreviewSvg"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "resourceLangId == png",
+          "command": "extension.kogito.createBase64Png",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceLangId == base64png",
+          "command": "extension.kogito.getPreviewSvg",
+          "group": "navigation"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "base64png",
+        "extensions": [
+          ".base64png"
+        ],
+        "aliases": [
+          "base64png",
+          "Base64 PNG"
+        ]
+      },
+      {
+        "id": "png",
+        "extensions": [
+          ".png"
+        ],
+        "aliases": [
+          "png",
+          "Png"
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
+    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose --passWithNoTests'",
+    "pack-extension": "vsce package --yarn -o ./dist/kogito_tooling_examples_todo_list_view_$npm_package_version.vsix",
+    "compile": "yarn run build:dev",
+    "watch": "yarn run build:dev",
+    "build:dev": "rimraf dist && webpack",
+    "build:prod": "yarn lint && rimraf dist && webpack && yarn run pack-extension && yarn test"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@types/vscode": "^1.46.0",
+    "vsce": "^1.93.0",
+    "vscode-test": "^1.5.2",
+    "css-loader": "^5.2.4",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.2",
+    "url-loader": "^4.1.1",
+    "sass-loader": "^12.0.0",
+    "sass": "^1.34.1",
+    "file-loader": "^6.2.0",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
+  },
+  "dependencies": {
+    "@kie-tooling-core/vscode-extension": "0.0.4",
+    "@kie-tooling-core/example-base64png-editor": "0.0.4"
+  }
+}

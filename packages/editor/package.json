@@ -25,6 +25,9 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
+  "peerDependencies": {
+    "@kie-tooling-core/patternfly-base": "0.0.4"
+  },
   "scripts": {
     "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
     "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose'",
