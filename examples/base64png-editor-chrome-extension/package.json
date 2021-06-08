@@ -1,11 +1,12 @@
 {
   "name": "@kie-tooling-core-examples/base64png-editor-chrome-extension",
   "version": "0.0.4",
+  "private": true,
   "description": "",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiegroup/kogito-tooling-examples.git"
+    "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "scripts": {
     "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",

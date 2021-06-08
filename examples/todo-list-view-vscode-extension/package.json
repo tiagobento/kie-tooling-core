@@ -1,5 +1,5 @@
 {
-  "name": "example-todo-list-view-vscode-extension",
+  "name": "todo-list-view-vscode-extension",
   "version": "0.0.4",
   "private": true,
   "publisher": "kie-tooling-core-examples",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiegroup/kogito-tooling-examples.git"
+    "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "categories": [
     "Other"
