@@ -41,7 +41,7 @@ jobs:
           KOGITO_TOOLING_BUILD_lint: "false"
           KOGITO_TOOLING_BUILD_test: "false"
         run: |
-          yarn bootstrap && lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }}
+          yarn bootstrap && lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }} --include-dependencies
 
       - name: "Setup kogito-tooling"
         uses: ./kogito-tooling/.github/actions/setup-env
@@ -52,7 +52,7 @@ jobs:
       - name: "Link kie-tooling-core with kogito-tooling"
         working-directory: ${{ github.workspace }}/kie-tooling-core
         run: |
-          lerna exec 'yarn pack' --stream
+          lerna exec 'yarn pack' --stream --no-private --since ${{ github.event.pull_request.base.sha }} --include-dependencies
           npm --prefix ../kogito-tooling install ./packages/*/*.tgz --no-save --package-lock=false
           rm ./packages/*/*.tgz
 
