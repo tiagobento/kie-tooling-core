@@ -22,13 +22,11 @@ jobs:
           node-version: 16.2.0
 
       - name: "Setup Yarn and Lerna"
-        shell: bash
         run: |
           npm install -g lerna@4.0.0 yarn@1.22.10
           yarn config set network-timeout 1000000
 
       - name: "Bootstrap"
-        shell: bash
         run: |
           yarn bootstrap
 
@@ -39,7 +37,6 @@ jobs:
           [ "0" == "$(git diff yarn.lock | wc -l | tr -d ' ')" ]
 
       - name: "Check format"
-        shell: bash
         run: |
           yarn format:check
 
@@ -48,7 +45,7 @@ jobs:
           KOGITO_TOOLING_BUILD_lint: "true"
           KOGITO_TOOLING_BUILD_test: "true"
         run: |
-          yarn bootstrap && yarn build:prod
+          yarn build:prod
 
       - name: "Upload build artifacts"
         uses: actions/upload-artifact@v2

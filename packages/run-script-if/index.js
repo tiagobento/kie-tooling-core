@@ -22,7 +22,7 @@ const { spawn } = require("child_process");
 
 async function main() {
   const argv = yargs(hideBin(process.argv))
-    .strict()
+    // .strict()
     .options({
       env: {
         required: true,
