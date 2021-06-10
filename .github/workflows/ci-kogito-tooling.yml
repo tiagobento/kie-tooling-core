@@ -43,7 +43,7 @@ jobs:
           yarn bootstrap && lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }}
 
       - name: "Setup kogito-tooling"
-        uses: ${{ github.workspace }}/kogito-tooling/.github/actions/setup-env
+        uses: ./kie-tooling-core/kogito-tooling/.github/actions/setup-env
         with:
           os: ${{ matrix.os }}
           path: ${{ github.workspace }}/kogito-tooling
