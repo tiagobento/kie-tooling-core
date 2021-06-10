@@ -1,0 +1,67 @@
+name: "CI :: Kogito Tooling"
+
+on:
+  pull_request:
+    branches: "**"
+
+jobs:
+  ci:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout kie-tooling-core"
+        uses: actions/checkout@v2
+        with:
+          path: kie-tooling-core
+          fetch-depth: 0
+
+      - name: "Checkout kogito-tooling"
+        uses: actions/checkout@v2
+        with:
+          repository: kiegroup/kogito-tooling
+          path: kogito-tooling
+          fetch-depth: 0
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.2.0
+
+      - name: "Setup Yarn and Lerna"
+        run: |
+          npm install -g lerna@4.0.0 yarn@1.22.10
+          yarn config set network-timeout 1000000
+
+      - name: "Bootstrap and build kie-tooling-core"
+        working-directory: kie-tooling-core
+        env:
+          KOGITO_TOOLING_BUILD_lint: "false"
+          KOGITO_TOOLING_BUILD_test: "false"
+        run: |
+          yarn bootstrap && lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }}
+
+      - name: "Setup kogito-tooling"
+        uses: ./kogito-tooling/.github/actions/setup-env
+        with:
+          os: ${{ matrix.os }}
+          path: ./kogito-tooling
+
+      - name: "Link kie-tooling-core with kogito-tooling"
+        working-directory: kie-tooling-core
+        run: |
+          lerna exec 'yarn pack' --stream --since ${{ github.event.pull_request.base.sha }}
+          npm --prefix ../kogito-tooling install ./packages/*/*.tgz --no-save --package-lock=false
+          rm ./packages/*/*.tgz
+
+      - name: "Build kogito-tooling"
+        working-directory: kogito-tooling
+        env:
+          WEBPACK_minimize: "false"
+          WEBPACK_TS_LOADER_transpileOnly: "false"
+          KOGITO_TOOLING_BUILD_lint: "false"
+          KOGITO_TOOLING_BUILD_test: "true"
+          KOGITO_TOOLING_BUILD_testIT: "true"
+        run: |
+          lerna run build:prod --stream --concurrency 1
