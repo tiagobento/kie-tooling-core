@@ -4,8 +4,8 @@
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
-    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
-    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose --passWithNoTests'",
+    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then \"yarn eslint ./src --ext .ts,.tsx\"",
+    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then \"jest --silent --verbose --passWithNoTests\"",
     "build:dev": "rimraf dist && webpack",
     "build:prod": "rimraf dist && webpack",
     "start": "webpack serve"

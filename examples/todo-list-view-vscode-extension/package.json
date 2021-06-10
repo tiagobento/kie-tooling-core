@@ -21,8 +21,8 @@
     "*"
   ],
   "scripts": {
-    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
-    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose --passWithNoTests'",
+    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then \"yarn eslint ./src --ext .ts,.tsx\"",
+    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then \"jest --silent --verbose --passWithNoTests\"",
     "pack-extension": "vsce package --yarn -o ./dist/kogito_tooling_examples_todo_list_view_$npm_package_version.vsix",
     "compile": "yarn run build:dev",
     "watch": "yarn run build:dev",

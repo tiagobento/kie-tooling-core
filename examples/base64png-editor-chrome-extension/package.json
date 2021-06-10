@@ -9,8 +9,8 @@
     "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "scripts": {
-    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then 'yarn eslint ./src --ext .ts,.tsx'",
-    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then 'jest --silent --verbose --passWithNoTests'",
+    "lint": "run-script-if --env KOGITO_TOOLING_BUILD_lint --true-if-empty --then \"yarn eslint ./src --ext .ts,.tsx\"",
+    "test": "run-script-if --env KOGITO_TOOLING_BUILD_test --true-if-empty --then \"jest --silent --verbose --passWithNoTests\"",
     "build:dev": "rimraf dist && webpack",
     "build:prod": "yarn run lint && rimraf dist && webpack && yarn test",
     "serve-envelope": "webpack serve"
