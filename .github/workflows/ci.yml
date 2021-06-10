@@ -1,0 +1,60 @@
+name: "CI"
+
+on:
+  pull_request:
+    branches: "**"
+
+jobs:
+  ci:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.2.0
+
+      - name: "Setup Yarn and Lerna"
+        shell: bash
+        run: |
+          npm install -g lerna@4.0.0 yarn@1.22.10
+          yarn config set network-timeout 1000000
+
+      - name: "Bootstrap"
+        shell: bash
+        run: |
+          yarn bootstrap
+
+      - name: "Check yarn.lock"
+        shell: bash
+        run: |
+          git diff yarn.lock;
+          [ "0" == "$(git diff yarn.lock | wc -l | tr -d ' ')" ]
+
+      - name: "Check format"
+        shell: bash
+        run: |
+          yarn format:check
+
+      - name: "Build"
+        env:
+          KOGITO_TOOLING_BUILD_lint: "true"
+          KOGITO_TOOLING_BUILD_test: "true"
+        run: |
+          yarn boostrap && yarn build:prod
+
+      - name: "Upload build artifacts"
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          if-no-files-found: warn
+          path: |
+            packages/*/dist
+            examples/*/dist
