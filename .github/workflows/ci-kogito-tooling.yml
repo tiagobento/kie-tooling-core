@@ -14,15 +14,15 @@ jobs:
       - name: "Checkout kie-tooling-core"
         uses: actions/checkout@v2
         with:
-          path: kie-tooling-core
+          path: ${{ github.workspace }}/kie-tooling-core
           fetch-depth: 0
 
       - name: "Checkout kogito-tooling"
         uses: actions/checkout@v2
         with:
-          repository: kiegroup/kogito-tooling
-          path: kogito-tooling
+          path: ${{ github.workspace }}/kogito-tooling
           fetch-depth: 0
+          repository: kiegroup/kogito-tooling
 
       - name: "Setup Node"
         uses: actions/setup-node@v1
@@ -35,7 +35,7 @@ jobs:
           yarn config set network-timeout 1000000
 
       - name: "Bootstrap and build kie-tooling-core"
-        working-directory: kie-tooling-core
+        working-directory: ${{ github.workspace }}/kie-tooling-core
         env:
           KOGITO_TOOLING_BUILD_lint: "false"
           KOGITO_TOOLING_BUILD_test: "false"
@@ -43,20 +43,20 @@ jobs:
           yarn bootstrap && lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }}
 
       - name: "Setup kogito-tooling"
-        uses: ./kogito-tooling/.github/actions/setup-env
+        uses: ${{ github.workspace }}/kogito-tooling/.github/actions/setup-env
         with:
           os: ${{ matrix.os }}
-          path: ./kogito-tooling
+          path: ${{ github.workspace }}/kogito-tooling
 
       - name: "Link kie-tooling-core with kogito-tooling"
-        working-directory: kie-tooling-core
+        working-directory: ${{ github.workspace }}/kie-tooling-core
         run: |
           lerna exec 'yarn pack' --stream --since ${{ github.event.pull_request.base.sha }}
           npm --prefix ../kogito-tooling install ./packages/*/*.tgz --no-save --package-lock=false
           rm ./packages/*/*.tgz
 
       - name: "Build kogito-tooling"
-        working-directory: kogito-tooling
+        working-directory: ${{ github.workspace }}/kogito-tooling
         env:
           WEBPACK_minimize: "false"
           WEBPACK_TS_LOADER_transpileOnly: "false"
