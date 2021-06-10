@@ -52,7 +52,7 @@ jobs:
       - name: "Link kie-tooling-core with kogito-tooling"
         working-directory: ${{ github.workspace }}/kie-tooling-core
         run: |
-          lerna exec 'yarn pack' --stream --since ${{ github.event.pull_request.base.sha }}
+          lerna exec 'yarn pack' --stream --since ${{ github.event.pull_request.base.sha }} --include-dependencies
           npm --prefix ../kogito-tooling install ./packages/*/*.tgz --no-save --package-lock=false
           rm ./packages/*/*.tgz
 
