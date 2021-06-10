@@ -176,7 +176,8 @@ function spawnCommandString(commandString) {
     .split(" ")
     .slice(1)
     .filter((arg) => arg.trim().length > 0);
-  return spawn(bin, args, { stdio: "inherit" });
+  const shell = process.platform === "win32" ? { shell: "powershell.exe" } : {};
+  return spawn(bin, args, { stdio: "inherit", ...shell });
 }
 
 function logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString) {
