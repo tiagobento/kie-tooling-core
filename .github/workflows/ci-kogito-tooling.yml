@@ -64,5 +64,6 @@ jobs:
           KOGITO_TOOLING_BUILD_lint: "false"
           KOGITO_TOOLING_BUILD_test: "true"
           KOGITO_TOOLING_BUILD_testIT: "true"
+          DISPLAY: ":99.0"
         run: |
           lerna run build:prod --stream --concurrency 1
