@@ -48,7 +48,7 @@ jobs:
           KOGITO_TOOLING_BUILD_lint: "true"
           KOGITO_TOOLING_BUILD_test: "true"
         run: |
-          yarn boostrap && yarn build:prod
+          yarn bootstrap && yarn build:prod
 
       - name: "Upload build artifacts"
         uses: actions/upload-artifact@v2
