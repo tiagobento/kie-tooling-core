@@ -21,17 +21,34 @@ jobs:
         with:
           node-version: 16.2.0
 
-      - name: "Setup environment"
-        uses: ./.github/actions/setup-env
-        with:
-          os: ${{ matrix.os }}
+      - name: "Setup Yarn and Lerna"
+        shell: bash
+        run: |
+          npm install -g lerna@4.0.0 yarn@1.22.10
+          yarn config set network-timeout 1000000
+
+      - name: "Bootstrap"
+        shell: bash
+        run: |
+          yarn bootstrap
+
+      - name: "Check yarn.lock"
+        shell: bash
+        run: |
+          git diff yarn.lock;
+          [ "0" == "$(git diff yarn.lock | wc -l | tr -d ' ')" ]
+
+      - name: "Check format"
+        shell: bash
+        run: |
+          yarn format:check
 
       - name: "Build"
         env:
           KOGITO_TOOLING_BUILD_lint: "true"
           KOGITO_TOOLING_BUILD_test: "true"
         run: |
-          lerna run build:prod --stream
+          yarn boostrap && yarn build:prod
 
       - name: "Upload build artifacts"
         uses: actions/upload-artifact@v2
