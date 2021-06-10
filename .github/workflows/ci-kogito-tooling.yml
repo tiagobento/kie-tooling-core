@@ -22,7 +22,7 @@ jobs:
         with:
           path: ${{ github.workspace }}/kogito-tooling
           fetch-depth: 0
-          repository: kiegroup/kogito-tooling
+          repository: tiagobento/kogito-tooling
           ref: monorepo
 
       - name: "Setup Node"
