@@ -1,7 +1,7 @@
 {
   "name": "@kie-tooling-core-examples/ping-pong-view-react",
-  "version": "0.0.4",
-  "private": false,
+  "version": "0.0.5",
+  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "Apache-2.0",
@@ -20,7 +20,7 @@
     "build:prod": "yarn lint && rimraf dist && yarn copy:css && tsc -p tsconfig.prod.json && yarn test"
   },
   "dependencies": {
-    "@kie-tooling-core/envelope-bus": "0.0.4",
-    "@kie-tooling-core-examples/ping-pong-view": "0.0.4"
+    "@kie-tooling-core-examples/ping-pong-view": "0.0.5",
+    "@kie-tooling-core/envelope-bus": "0.0.5"
   }
 }
