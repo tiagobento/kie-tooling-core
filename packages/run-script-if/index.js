@@ -87,6 +87,12 @@ async function main() {
         throw new Error("Conditions must either be --bool or --env");
       }
 
+      if (argv.bool !== "true" && argv.bool !== "false") {
+        throw new Error(
+          `Boolean condition provided, but value is '${argv.bool}'. Boolean condition values must be either 'true' or 'false'.`
+        );
+      }
+
       if (argv.bool && argv["true-if-empty"]) {
         throw new Error("Conditions with --bool cannot be used with --true-if-empty");
       }
