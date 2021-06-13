@@ -25,10 +25,12 @@ async function main() {
     .strict()
     .options({
       env: {
-        required: true,
-        alias: "e",
         type: "string",
         description: "Environment variable name",
+      },
+      bool: {
+        type: "string",
+        description: "Boolean value to be used as condition",
       },
       eq: {
         default: "true",
@@ -79,6 +81,21 @@ async function main() {
         description:
           "Command(s) to execute at the end of execution. Provided commands will run even if one of the commands being executed fails.",
       },
+    })
+    .check((argv, options) => {
+      if (argv.bool && argv.env) {
+        throw new Error("Conditions must either be --bool or --env");
+      }
+
+      if (argv.bool && argv["true-if-empty"]) {
+        throw new Error("Conditions with --bool cannot be used with --true-if-empty");
+      }
+
+      if (!(argv.bool || argv.env)) {
+        throw new Error("Conditions must be either --bool or --env");
+      }
+
+      return true;
     }).argv;
 
   const log = (logFunction, ...args) => {
@@ -92,6 +109,8 @@ async function main() {
   const shouldRunIfEmpty = argv["true-if-empty"];
 
   const condition =
+    // --bool conditions are true if equals to --eq
+    argv.bool === argv.eq ||
     // env var value is logically empty and --true-if-empty is enabled
     ((envVarValue === undefined || envVarValue === "") && shouldRunIfEmpty) ||
     // env var value is equal to the --eq argument
@@ -101,7 +120,8 @@ async function main() {
 
   const commandStringsToRun = condition ? argv.then : argv.else;
 
-  log(console.info, LOGS.envVarSummary(envVarName, envVarValue));
+  if (envVarName) log(console.info, LOGS.envVarSummary(envVarName, envVarValue));
+  if (argv.bool) log(console.info, LOGS.boolSummary());
   if (shouldRunIfEmpty) log(console.info, LOGS.trueIfEmptyEnabled());
   if (argv.force) log(console.info, LOGS.forceEnabled());
   log(console.info, LOGS.conditionSummary(condition));
@@ -218,6 +238,9 @@ const LOGS = {
   errorOnMiddleCommand: (commandString, commandsLeft, skippedCommandStrings) => {
     const skippedCommandStringsLog = `'${skippedCommandStrings.join("', '")}'`;
     return `Error executing '${commandString}'. Stopping and skipping ${commandsLeft} command(s): [${skippedCommandStringsLog}]`;
+  },
+  boolSummary: () => {
+    return `Bool condition supplied.`;
   },
   envVarSummary: (envVarName, envVarValue) => {
     let envVarValueLog;
