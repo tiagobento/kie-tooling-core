@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core-examples/base64png-editor-chrome-extension",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "description": "",
   "license": "Apache-2.0",
@@ -22,9 +22,9 @@
     ]
   },
   "dependencies": {
-    "@kie-tooling-core-examples/base64png-editor": "0.0.6",
-    "@kie-tooling-core/chrome-extension": "0.0.6",
-    "@kie-tooling-core/patternfly-base": "0.0.6"
+    "@kie-tooling-core-examples/base64png-editor": "0.0.7",
+    "@kie-tooling-core/chrome-extension": "0.0.7",
+    "@kie-tooling-core/patternfly-base": "0.0.7"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.137",
