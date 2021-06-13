@@ -59,8 +59,8 @@ jobs:
       - name: "Build kogito-tooling"
         working-directory: ${{ github.workspace }}/kogito-tooling
         env:
-          WEBPACK_minimize: "false"
-          WEBPACK_TS_LOADER_transpileOnly: "false"
+          WEBPACK__minimize: "false"
+          WEBPACK__tsLoaderTranspileOnly: "false"
           KOGITO_TOOLING_BUILD_lint: "false"
           KOGITO_TOOLING_BUILD_test: "true"
           KOGITO_TOOLING_BUILD_testIT: "true"
