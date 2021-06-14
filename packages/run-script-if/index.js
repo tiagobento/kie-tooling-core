@@ -18,7 +18,7 @@
 
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
-const { spawn } = require("child_process");
+const { spawn, spawnSync } = require("child_process");
 
 async function main() {
   const argv = yargs(hideBin(process.argv))
@@ -87,9 +87,10 @@ async function main() {
         throw new Error("Conditions must either be --bool or --env");
       }
 
-      if (argv.bool && argv.bool !== "true" && argv.bool !== "false") {
+      const boolCondition = evaluateBoolCondition(argv);
+      if (boolCondition && boolCondition !== "true" && boolCondition !== "false") {
         throw new Error(
-          `Boolean condition provided, but value is '${argv.bool}'. Boolean condition values must be either 'true' or 'false'.`
+          `Boolean condition provided, but value is '${boolCondition}'. Boolean condition values must be either 'true' or 'false'.`
         );
       }
 
@@ -113,10 +114,11 @@ async function main() {
   const envVarName = argv.env;
   const envVarValue = process.env[envVarName];
   const shouldRunIfEmpty = argv["true-if-empty"];
+  const boolCondition = evaluateBoolCondition(argv);
 
   const condition =
     // --bool conditions are true if equals to --eq
-    argv.bool === argv.eq ||
+    boolCondition === argv.eq ||
     // env var value is logically empty and --true-if-empty is enabled
     ((envVarValue === undefined || envVarValue === "") && shouldRunIfEmpty) ||
     // env var value is equal to the --eq argument
@@ -161,6 +163,15 @@ async function main() {
         console.error(err.msg);
       });
     });
+}
+
+function evaluateBoolCondition(argv) {
+  if (process.platform === "win32" && argv.bool.startsWith("$")) {
+    const output = spawnSync(argv.bool, [], { stdio: "pipe", shell: "powershell.exe" });
+    return String(output.stdout).trim();
+  } else {
+    return argv.bool;
+  }
 }
 
 async function runCommandStrings(log, argv, commandStringsToRun) {
@@ -246,7 +257,7 @@ const LOGS = {
     return `Error executing '${commandString}'. Stopping and skipping ${commandsLeft} command(s): [${skippedCommandStringsLog}]`;
   },
   boolSummary: () => {
-    return `Bool condition supplied.`;
+    return `Boolean condition supplied.`;
   },
   envVarSummary: (envVarName, envVarValue) => {
     let envVarValueLog;
