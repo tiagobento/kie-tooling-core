@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core/notifications",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "license": "Apache-2.0",
   "files": [
@@ -18,8 +18,8 @@
     "build:prod": "yarn lint && rimraf dist && tsc -p tsconfig.prod.json && yarn test"
   },
   "dependencies": {
-    "@kie-tooling-core/i18n": "0.0.8",
-    "@kie-tooling-core/workspace": "0.0.8"
+    "@kie-tooling-core/i18n": "0.0.9",
+    "@kie-tooling-core/workspace": "0.0.9"
   },
   "babel": {
     "presets": [

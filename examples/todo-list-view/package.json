@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core-examples/todo-list-view",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "license": "Apache-2.0",
   "files": [
@@ -18,7 +18,7 @@
     "build:prod": "yarn lint && rimraf dist && yarn copy:css && tsc -p tsconfig.prod.json && yarn test"
   },
   "dependencies": {
-    "@kie-tooling-core/envelope": "0.0.8",
-    "@kie-tooling-core/envelope-bus": "0.0.8"
+    "@kie-tooling-core/envelope": "0.0.9",
+    "@kie-tooling-core/envelope-bus": "0.0.9"
   }
 }
