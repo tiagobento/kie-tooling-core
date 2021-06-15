@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core/chrome-extension",
-  "version": "0.0.8",
+  "version": "0.0.0",
   "description": "",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
@@ -15,9 +15,9 @@
     "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "dependencies": {
-    "@kie-tooling-core/editor": "0.0.8",
-    "@kie-tooling-core/i18n": "0.0.8",
-    "@kie-tooling-core/patternfly-base": "0.0.8",
+    "@kie-tooling-core/editor": "0.0.0",
+    "@kie-tooling-core/i18n": "0.0.0",
+    "@kie-tooling-core/patternfly-base": "0.0.0",
     "@octokit/rest": "^18.5.3",
     "minimatch": "^3.0.4",
     "react": "^17.0.2",
