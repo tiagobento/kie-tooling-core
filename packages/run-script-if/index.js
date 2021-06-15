@@ -166,7 +166,7 @@ async function main() {
 }
 
 function evaluateBoolCondition(argv) {
-  if (process.platform === "win32" && argv.bool.startsWith("$")) {
+  if (process.platform === "win32" && argv.bool && argv.bool.startsWith("$")) {
     const output = spawnSync(argv.bool, [], { stdio: "pipe", shell: "powershell.exe" });
     return String(output.stdout).trim();
   } else {
