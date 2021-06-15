@@ -31,7 +31,7 @@ jobs:
           node-version: 16.2.0
 
       - name: "Setup kie-tooling-core environment"
-        uses: ./kie-tooling-core-tooling/.github/actions/setup-env
+        uses: ./kie-tooling-core/.github/actions/setup-env
         with:
           os: ${{ matrix.os }}
           path: ${{ github.workspace }}/kie-tooling-core
