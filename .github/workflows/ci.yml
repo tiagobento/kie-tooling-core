@@ -21,24 +21,10 @@ jobs:
         with:
           node-version: 16.2.0
 
-      - name: "Setup Yarn and Lerna"
-        run: |
-          npm install -g lerna@4.0.0 yarn@1.22.10
-          yarn config set network-timeout 1000000
-
-      - name: "Bootstrap"
-        run: |
-          yarn bootstrap
-
-      - name: "Check yarn.lock"
-        shell: bash
-        run: |
-          git diff yarn.lock;
-          [ "0" == "$(git diff yarn.lock | wc -l | tr -d ' ')" ]
-
-      - name: "Check format"
-        run: |
-          yarn format:check
+      - name: "Setup environment"
+        uses: ./.github/actions/setup-env
+        with:
+          os: ${{ matrix.os }}
 
       - name: "Build"
         env:

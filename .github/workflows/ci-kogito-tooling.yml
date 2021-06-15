@@ -30,10 +30,11 @@ jobs:
         with:
           node-version: 16.2.0
 
-      - name: "Setup Yarn and Lerna"
-        run: |
-          npm install -g lerna@4.0.0 yarn@1.22.10
-          yarn config set network-timeout 1000000
+      - name: "Setup kie-tooling-core environment"
+        uses: ./kie-tooling-core-tooling/.github/actions/setup-env
+        with:
+          os: ${{ matrix.os }}
+          path: ${{ github.workspace }}/kie-tooling-core
 
       - name: "Bootstrap and build kie-tooling-core"
         working-directory: ${{ github.workspace }}/kie-tooling-core
@@ -41,9 +42,9 @@ jobs:
           KOGITO_TOOLING_BUILD_lint: "false"
           KOGITO_TOOLING_BUILD_test: "false"
         run: |
-          yarn bootstrap && lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }} --include-dependencies
+          lerna run build:prod --stream --no-private --since ${{ github.event.pull_request.base.sha }} --include-dependencies
 
-      - name: "Setup kogito-tooling"
+      - name: "Setup kogito-tooling environment"
         uses: ./kogito-tooling/.github/actions/setup-env
         with:
           os: ${{ matrix.os }}
@@ -65,5 +66,6 @@ jobs:
           KOGITO_TOOLING_BUILD_test: "true"
           KOGITO_TOOLING_BUILD_testIT: "true"
           DISPLAY: ":99.0"
+          START_SERVER_AND_TEST_INSECURE: "true"
         run: |
           lerna run build:prod --stream --concurrency 1

@@ -1,0 +1,44 @@
+name: "Setup Kie Tooling Core build environment"
+description: "setup"
+
+inputs:
+  os:
+    description: "Operating System"
+    required: true
+  path:
+    description: "kie-tooling-core path"
+    required: false
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Setup Yarn and Lerna"
+      shell: bash
+      run: |
+        echo "STEP: Setup Yarn and Lerna"
+        cd ${{ inputs.path }}
+        npm install -g lerna@4.0.0 yarn@1.22.10
+        yarn config set network-timeout 1000000
+
+    - name: "Bootstrap"
+      shell: bash
+      run: |
+        echo "STEP: Bootstrap"
+        cd ${{ inputs.path }}
+        yarn bootstrap
+
+    - name: "Check yarn.lock"
+      shell: bash
+      run: |
+        echo "STEP: Check yarn.lock"
+        cd ${{ inputs.path }}
+        git diff yarn.lock;
+        [ "0" == "$(git diff yarn.lock | wc -l | tr -d ' ')" ]
+
+    - name: "Check format"
+      shell: bash
+      run: |
+        echo "STEP: Check format"
+        cd ${{ inputs.path }}
+        yarn format:check

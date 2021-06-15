@@ -1,0 +1,65 @@
+name: "Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version"
+        required: true
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.KOGITO_TOOLING_BOT_TOKEN }}
+
+      - name: "Setup kogito-tooling-bot"
+        uses: ./.github/actions/setup-kogito-tooling-bot
+
+      - name: "Setup environment"
+        uses: ./.github/actions/setup-env
+        with:
+          os: ${{ matrix.os }}
+
+      - name: "Prepare '${{ github.event.inputs.version }}-prerelease' branch"
+        id: create-release-branch
+        run: |
+          git checkout -b ${{ github.event.inputs.version }}-prerelease
+          yarn update-version-to ${{ github.event.inputs.version }}
+          git commit -am "Update version to ${{ github.event.inputs.version }}"
+          # generate changelogs
+          # commit
+          echo ::set-output name=ref::$(git rev-parse HEAD)
+
+      - name: "Build"
+        env:
+          KOGITO_TOOLING_BUILD_lint: "true"
+          KOGITO_TOOLING_BUILD_test: "true"
+        run: |
+          lerna run build:prod --stream --no-private
+
+      - name: "Push '${{ github.event.inputs.version }}-prerelease' branch"
+        run: |
+          git push origin ${{ github.event.inputs.version }}-prerelease
+
+      - name: "Publish packages to NPM registry"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          lerna exec 'npm publish --access public' --stream --no-private --no-bail
+
+      - name: "Create GitHub Release"
+        id: create_release_draft
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: ${{ github.event.inputs.version }} (alpha)
+          commitish: ${{ steps.create-release-branch.outputs.ref }}
+          draft: false
+          prerelease: true
