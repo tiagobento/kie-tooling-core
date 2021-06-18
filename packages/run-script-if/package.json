@@ -11,6 +11,11 @@
     "type": "git",
     "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
+  "scripts": {
+    "write-readme": "echo '```' > README.md && run-script-if --help >> README.md && echo '```' >> README.md",
+    "build:dev": "yarn write-readme",
+    "build:prod": "yarn write-readme"
+  },
   "dependencies": {
     "yargs": "^17.0.1"
   }

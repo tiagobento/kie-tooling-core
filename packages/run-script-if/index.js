@@ -22,6 +22,21 @@ const { spawn, spawnSync } = require("child_process");
 
 async function main() {
   const argv = yargs(hideBin(process.argv))
+    .epilog(
+      `
+CLI tool to help executing shell scripts conditionally with a friendly syntax on Linux, macOS, and Windows.
+
+
+__NOTE__:
+Because 'run-script-if' was created with Yarn/NPM scripts, environment variables and sub-expression syntax (\`$(expr)\`) in mind, 'run-script-if' will force the provided commands to be executed on PowerShell.
+
+This is because Yarn and NPM default to the CMD shell on Windows, making it not ideal for sub-expression-dependent commands. 
+
+Apart from using it on commands, it's also possible to use the sub-expression syntax on boolean conditions, like:
+
+$ run-script-if --bool "$(my-custom-command --isEnabled)" --then "echo 'Hello'"
+    `
+    )
     .strict()
     .options({
       env: {
@@ -167,7 +182,7 @@ async function main() {
 
 function evaluateBoolCondition(argv) {
   if (process.platform === "win32" && argv.bool && argv.bool.startsWith("$")) {
-    const output = spawnSync(argv.bool, [], { stdio: "pipe", shell: "powershell.exe" });
+    const output = spawnSync(argv.bool, [], { stdio: "pipe", ...shell() });
     return String(output.stdout).trim();
   } else {
     return argv.bool;
@@ -213,8 +228,11 @@ function spawnCommandString(commandString) {
     .split(" ")
     .slice(1)
     .filter((arg) => arg.trim().length > 0);
-  const shell = process.platform === "win32" ? { shell: "powershell.exe" } : {};
-  return spawn(bin, args, { stdio: "inherit", ...shell });
+  return spawn(bin, args, { stdio: "inherit", ...shell() });
+}
+
+function shell() {
+  return process.platform === "win32" ? { shell: "powershell.exe" } : {};
 }
 
 function logCommandError(log, commandStringsToRun, nCommandsFinished, runningCommandString) {
