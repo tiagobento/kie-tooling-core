@@ -2,19 +2,21 @@
 Options:
   --help           Show help                                           [boolean]
   --version        Show version number                                 [boolean]
-  --env            Environment variable name                            [string]
+  --env            Name of the environment variables which value will be
+                   compared to --eq.                                    [string]
   --bool           Boolean value to be used as condition                [string]
-  --eq, --equals   Value to be compared with the environment variable.
-                                                      [string] [default: "true"]
-  --then           Command(s) to execute if environment variable has the desired
-                   value                                      [array] [required]
-  --else           Command(s) to execute if environment variable doesn't have
-                   the desired value                       [array] [default: []]
-  --true-if-empty  If the environment variable is not set, the command(s)
-                   supplied to --then will run.       [boolean] [default: false]
-  --silent         Hide logs from output.             [boolean] [default: false]
-  --force          Runs command(s) supplied to --then regardless of the
-                   environment variable value.        [boolean] [default: false]
+  --eq, --equals   Value to be compared with the condition supplied. Both --bool
+                   and --env.                         [string] [default: "true"]
+  --then           Command(s) to execute if the condition is true.
+                                                              [array] [required]
+  --else           Command(s) to execute if the condition is false.
+                                                           [array] [default: []]
+  --true-if-empty  If the environment variable is not set, makes the condition
+                   be true.                           [boolean] [default: false]
+  --silent         Hide info logs from output. Logs from commands will still
+                   show.                              [boolean] [default: false]
+  --force          Makes condition be true. Runs command(s) supplied to --then.
+                                                      [boolean] [default: false]
   --catch          Command(s) to execute at the end of execution if one of the
                    commands being executed fails.          [array] [default: []]
   --finally        Command(s) to execute at the end of execution. Provided

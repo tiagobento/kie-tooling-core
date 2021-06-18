@@ -41,7 +41,7 @@ $ run-script-if --bool "$(my-custom-command --isEnabled)" --then "echo 'Hello'"
     .options({
       env: {
         type: "string",
-        description: "Environment variable name",
+        description: "Name of the environment variables which value will be compared to --eq.",
       },
       bool: {
         type: "string",
@@ -51,35 +51,35 @@ $ run-script-if --bool "$(my-custom-command --isEnabled)" --then "echo 'Hello'"
         default: "true",
         alias: "equals",
         type: "string",
-        description: "Value to be compared with the environment variable.",
+        description: "Value to be compared with the condition supplied. Both --bool and --env.",
       },
       then: {
         array: true,
         required: true,
         type: "string",
-        description: "Command(s) to execute if environment variable has the desired value",
+        description: "Command(s) to execute if the condition is true.",
       },
       else: {
         default: [],
         array: true,
         required: false,
         type: "string",
-        description: "Command(s) to execute if environment variable doesn't have the desired value",
+        description: "Command(s) to execute if the condition is false.",
       },
       "true-if-empty": {
         default: false,
         type: "boolean",
-        description: "If the environment variable is not set, the command(s) supplied to --then will run.",
+        description: "If the environment variable is not set, makes the condition be true.",
       },
       silent: {
         default: false,
         type: "boolean",
-        description: "Hide logs from output.",
+        description: "Hide info logs from output. Logs from commands will still show.",
       },
       force: {
         default: false,
         type: "boolean",
-        description: "Runs command(s) supplied to --then regardless of the environment variable value.",
+        description: "Makes condition be true. Runs command(s) supplied to --then.",
       },
       catch: {
         default: [],
