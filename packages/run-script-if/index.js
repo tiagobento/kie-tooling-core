@@ -27,7 +27,7 @@ async function main() {
 CLI tool to help executing shell scripts conditionally with a friendly syntax on Linux, macOS, and Windows.
 
 
-__NOTE__:
+__NOTE FOR WINDOWS USAGE__:
 Because 'run-script-if' was created with Yarn/NPM scripts, environment variables and sub-expression syntax (\`$(expr)\`) in mind, 'run-script-if' will force the provided commands to be executed on PowerShell.
 
 This is because Yarn and NPM default to the CMD shell on Windows, making it not ideal for sub-expression-dependent commands. 
