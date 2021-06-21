@@ -17,6 +17,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2
         with:
+          fetch-depth: 0
           token: ${{ secrets.KOGITO_TOOLING_BOT_TOKEN }}
 
       - name: "Setup kogito-tooling-bot"
@@ -65,10 +66,14 @@ jobs:
         shell: bash
         run: |
           CURRENT_COMMIT_SHA=${{ steps.create_release_branch.outputs.ref }}
+          echo "A"
           MERGE_BASE_WITH_LATEST_VERSION=$(git merge-base $CURRENT_COMMIT_SHA ${{ github.event.inputs.latest_version }})
-          COMMIT_LIST=$(git log --pretty=format:'- [`%h`](https://github.com/${{ github.repository }}/commit/%H) %s ' --abbrev-commit $MERGE_BASE_WITH_LATEST_VERSION..$CURRENT_COMMIT_SHA)
-          RELEASE_DESCRIPTION_BODY=$(echo "#### On this release:\n\n$COMMIT_LIST")
-          echo ::set-output name=body::$RELEASE_DESCRIPTION_BODY
+          echo "B"
+          COMMIT_LIST=$(git log --pretty=format:'- [`%h`](https://github.com/${{ github.repository }}/commit/%H) %s' --abbrev-commit $MERGE_BASE_WITH_LATEST_VERSION..$CURRENT_COMMIT_SHA)
+          echo "C"
+          RELEASE_DESCRIPTION_BODY=$(printf "#### On this release:\n\n$COMMIT_LIST")
+          echo "D"
+          echo "::set-output name=body::$RELEASE_DESCRIPTION_BODY"
 
       - name: "Create GitHub Release"
         uses: actions/create-release@v1.1.4
