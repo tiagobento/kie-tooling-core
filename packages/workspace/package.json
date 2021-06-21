@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core/workspace",
-  "version": "0.0.0",
+  "version": "0.0.13",
   "description": "",
   "license": "Apache-2.0",
   "files": [
@@ -18,7 +18,7 @@
     "build:prod": "yarn lint && rimraf dist && tsc -p tsconfig.prod.json && yarn test"
   },
   "dependencies": {
-    "@kie-tooling-core/operating-system": "0.0.0"
+    "@kie-tooling-core/operating-system": "0.0.13"
   },
   "babel": {
     "presets": [

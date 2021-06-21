@@ -1,6 +1,6 @@
 {
   "name": "todo-list-view-vscode-extension",
-  "version": "0.0.0",
+  "version": "0.0.13",
   "private": true,
   "publisher": "kie-tooling-core-examples",
   "displayName": "Todo List View :: Kogito Examples ",
@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "@kie-tooling-core-examples/todo-list-view": "0.0.0"
+    "@kie-tooling-core-examples/todo-list-view": "0.0.13"
   },
   "devDependencies": {
     "@types/node": "^15.12.2",

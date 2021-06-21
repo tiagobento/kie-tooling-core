@@ -1,6 +1,6 @@
 {
   "name": "base64png-editor-vscode-extension",
-  "version": "0.0.0",
+  "version": "0.0.13",
   "private": true,
   "displayName": "Kogito Base64 PNG Editor",
   "publisher": "kie-tooling-core-examples",
@@ -123,7 +123,7 @@
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
-    "@kie-tooling-core-examples/base64png-editor": "0.0.0",
-    "@kie-tooling-core/vscode-extension": "0.0.0"
+    "@kie-tooling-core-examples/base64png-editor": "0.0.13",
+    "@kie-tooling-core/vscode-extension": "0.0.13"
   }
 }

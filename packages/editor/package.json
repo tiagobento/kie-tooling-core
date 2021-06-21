@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core/editor",
-  "version": "0.0.0",
+  "version": "0.0.13",
   "description": "",
   "license": "Apache-2.0",
   "main": "./dist/index.js",
@@ -14,15 +14,15 @@
     "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "dependencies": {
-    "@kie-tooling-core/backend": "0.0.0",
-    "@kie-tooling-core/envelope": "0.0.0",
-    "@kie-tooling-core/envelope-bus": "0.0.0",
-    "@kie-tooling-core/guided-tour": "0.0.0",
-    "@kie-tooling-core/i18n": "0.0.0",
-    "@kie-tooling-core/keyboard-shortcuts": "0.0.0",
-    "@kie-tooling-core/notifications": "0.0.0",
-    "@kie-tooling-core/patternfly-base": "0.0.0",
-    "@kie-tooling-core/workspace": "0.0.0",
+    "@kie-tooling-core/backend": "0.0.13",
+    "@kie-tooling-core/envelope": "0.0.13",
+    "@kie-tooling-core/envelope-bus": "0.0.13",
+    "@kie-tooling-core/guided-tour": "0.0.13",
+    "@kie-tooling-core/i18n": "0.0.13",
+    "@kie-tooling-core/keyboard-shortcuts": "0.0.13",
+    "@kie-tooling-core/notifications": "0.0.13",
+    "@kie-tooling-core/patternfly-base": "0.0.13",
+    "@kie-tooling-core/workspace": "0.0.13",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

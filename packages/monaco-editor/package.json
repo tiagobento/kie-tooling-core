@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core/monaco-editor",
-  "version": "0.0.0",
+  "version": "0.0.13",
   "description": "Single-file build of monaco-editor.",
   "main": "dist/standalone/monaco.min.js",
   "types": "dist/standalone/monaco.min.d.ts",
