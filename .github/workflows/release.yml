@@ -60,6 +60,16 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
           lerna exec 'npm publish --access public' --stream --no-private --no-bail
 
+      - name: "Release notes"
+        id: release-notes
+        shell: bash
+        run: |
+          CURRENT_COMMIT_SHA=${{ steps.create-release-branch.outputs.ref }}
+          MERGE_BASE_WITH_LATEST_VERSION=$(git merge-base $CURRENT_COMMIT_SHA ${{ github.event.inputs.latest-version }})
+          COMMIT_LIST=$(git log --pretty=format:'- [`%h`](https://github.com/${{ github.repository }}/commit/%H) %s ' --abbrev-commit $MERGE_BASE_WITH_LATEST_VERSION..$CURRENT_COMMIT_SHA)
+          RELEASE_DESCRIPTION_BODY=$(echo "#### On this release:\n\n$COMMIT_LIST")
+          echo ::set-output name=body::$RELEASE_DESCRIPTION_BODY
+
       - name: "Create GitHub Release"
         id: create_release_draft
         uses: actions/create-release@v1.1.4
@@ -69,5 +79,6 @@ jobs:
           tag_name: ${{ github.event.inputs.new-version }}
           release_name: ${{ github.event.inputs.new-version }} (alpha)
           commitish: ${{ steps.create-release-branch.outputs.ref }}
+          body: ${{ steps.release_notes.outputs.body }}
           draft: false
           prerelease: true
