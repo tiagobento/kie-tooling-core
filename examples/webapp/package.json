@@ -18,7 +18,7 @@
     "@kie-tooling-core/patternfly-base": "0.0.0"
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.5",
+    "@types/react-router-dom": "^5.1.7",
     "copy-webpack-plugin": "^9.0.0",
     "css-loader": "^5.2.4",
     "file-loader": "^6.2.0",
