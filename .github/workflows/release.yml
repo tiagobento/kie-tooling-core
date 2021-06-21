@@ -3,8 +3,11 @@ name: "Release"
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version"
+      new-version:
+        description: "New version"
+        required: true
+      latest-version:
+        description: "Latest version"
         required: true
 
 jobs:
@@ -29,12 +32,12 @@ jobs:
         with:
           os: ${{ matrix.os }}
 
-      - name: "Prepare '${{ github.event.inputs.version }}-prerelease' branch"
+      - name: "Prepare '${{ github.event.inputs.new-version }}-prerelease' branch"
         id: create-release-branch
         run: |
-          git checkout -b ${{ github.event.inputs.version }}-prerelease
-          yarn update-version-to ${{ github.event.inputs.version }}
-          git commit -am "Update version to ${{ github.event.inputs.version }}"
+          git checkout -b ${{ github.event.inputs.new-version }}-prerelease
+          yarn update-version-to ${{ github.event.inputs.new-version }}
+          git commit -am "Update version to ${{ github.event.inputs.new-version }}"
           # generate changelogs
           # commit
           echo ::set-output name=ref::$(git rev-parse HEAD)
@@ -46,9 +49,9 @@ jobs:
         run: |
           lerna run build:prod --stream --no-private
 
-      - name: "Push '${{ github.event.inputs.version }}-prerelease' branch"
+      - name: "Push '${{ github.event.inputs.new-version }}-prerelease' branch"
         run: |
-          git push origin ${{ github.event.inputs.version }}-prerelease
+          git push origin ${{ github.event.inputs.new-version }}-prerelease
 
       - name: "Publish packages to NPM registry"
         env:
@@ -63,8 +66,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.event.inputs.version }}
-          release_name: ${{ github.event.inputs.version }} (alpha)
+          tag_name: ${{ github.event.inputs.new-version }}
+          release_name: ${{ github.event.inputs.new-version }} (alpha)
           commitish: ${{ steps.create-release-branch.outputs.ref }}
           draft: false
           prerelease: true
