@@ -61,19 +61,24 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
           lerna exec 'npm publish --access public' --stream --no-private --no-bail
 
+      # Escaping is necessary: See https://github.community/t/set-output-truncates-multiline-strings/16852
       - name: "Release notes"
         id: release_notes
         shell: bash
         run: |
           CURRENT_COMMIT_SHA=${{ steps.create_release_branch.outputs.ref }}
-          echo "A"
           MERGE_BASE_WITH_LATEST_VERSION=$(git merge-base $CURRENT_COMMIT_SHA ${{ github.event.inputs.latest_version }})
-          echo "B"
           COMMIT_LIST=$(git log --pretty=format:'- [`%h`](https://github.com/${{ github.repository }}/commit/%H) %s' --abbrev-commit $MERGE_BASE_WITH_LATEST_VERSION..$CURRENT_COMMIT_SHA)
-          echo "C"
           RELEASE_DESCRIPTION_BODY=$(printf "#### On this release:\n\n$COMMIT_LIST")
-          echo "D"
+          RELEASE_DESCRIPTION_BODY="${RELEASE_DESCRIPTION_BODY//'%'/'%25'}"
+          RELEASE_DESCRIPTION_BODY="${RELEASE_DESCRIPTION_BODY//$'\n'/'%0A'}"
+          RELEASE_DESCRIPTION_BODY="${RELEASE_DESCRIPTION_BODY//$'\r'/'%0D'}"
           echo "::set-output name=body::$RELEASE_DESCRIPTION_BODY"
+
+      - name: "Debug release notes"
+        shell: bash
+        run: |
+          echo "${{ steps.release_notes.outputs.body }}"
 
       - name: "Create GitHub Release"
         uses: actions/create-release@v1.1.4
