@@ -3,10 +3,10 @@ name: "Release"
 on:
   workflow_dispatch:
     inputs:
-      new-version:
+      new_version:
         description: "New version"
         required: true
-      latest-version:
+      latest_version:
         description: "Latest version"
         required: true
 
@@ -32,12 +32,12 @@ jobs:
         with:
           os: ${{ matrix.os }}
 
-      - name: "Prepare '${{ github.event.inputs.new-version }}-prerelease' branch"
-        id: create-release-branch
+      - name: "Prepare '${{ github.event.inputs.new_version }}-prerelease' branch"
+        id: create_release_branch
         run: |
-          git checkout -b ${{ github.event.inputs.new-version }}-prerelease
-          yarn update-version-to ${{ github.event.inputs.new-version }}
-          git commit -am "Update version to ${{ github.event.inputs.new-version }}"
+          git checkout -b ${{ github.event.inputs.new_version }}-prerelease
+          yarn update-version-to ${{ github.event.inputs.new_version }}
+          git commit -am "Update version to ${{ github.event.inputs.new_version }}"
           # generate changelogs
           # commit
           echo ::set-output name=ref::$(git rev-parse HEAD)
@@ -49,9 +49,9 @@ jobs:
         run: |
           lerna run build:prod --stream --no-private
 
-      - name: "Push '${{ github.event.inputs.new-version }}-prerelease' branch"
+      - name: "Push '${{ github.event.inputs.new_version }}-prerelease' branch"
         run: |
-          git push origin ${{ github.event.inputs.new-version }}-prerelease
+          git push origin ${{ github.event.inputs.new_version }}-prerelease
 
       - name: "Publish packages to NPM registry"
         env:
@@ -61,24 +61,23 @@ jobs:
           lerna exec 'npm publish --access public' --stream --no-private --no-bail
 
       - name: "Release notes"
-        id: release-notes
+        id: release_notes
         shell: bash
         run: |
-          CURRENT_COMMIT_SHA=${{ steps.create-release-branch.outputs.ref }}
-          MERGE_BASE_WITH_LATEST_VERSION=$(git merge-base $CURRENT_COMMIT_SHA ${{ github.event.inputs.latest-version }})
+          CURRENT_COMMIT_SHA=${{ steps.create_release_branch.outputs.ref }}
+          MERGE_BASE_WITH_LATEST_VERSION=$(git merge-base $CURRENT_COMMIT_SHA ${{ github.event.inputs.latest_version }})
           COMMIT_LIST=$(git log --pretty=format:'- [`%h`](https://github.com/${{ github.repository }}/commit/%H) %s ' --abbrev-commit $MERGE_BASE_WITH_LATEST_VERSION..$CURRENT_COMMIT_SHA)
           RELEASE_DESCRIPTION_BODY=$(echo "#### On this release:\n\n$COMMIT_LIST")
           echo ::set-output name=body::$RELEASE_DESCRIPTION_BODY
 
       - name: "Create GitHub Release"
-        id: create_release_draft
         uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.event.inputs.new-version }}
-          release_name: ${{ github.event.inputs.new-version }} (alpha)
-          commitish: ${{ steps.create-release-branch.outputs.ref }}
+          tag_name: ${{ github.event.inputs.new_version }}
+          release_name: ${{ github.event.inputs.new_version }} (alpha)
+          commitish: ${{ steps.create_release_branch.outputs.ref }}
           body: ${{ steps.release_notes.outputs.body }}
           draft: false
           prerelease: true
