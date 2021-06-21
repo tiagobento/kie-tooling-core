@@ -13,6 +13,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Fetch Git tags"
+      shell: bash
+      run: |
+        echo "STEP: Fetch Git tags"
+        cd ${{ inputs.path }}
+        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
     - name: "Setup Yarn and Lerna"
       shell: bash
       run: |
