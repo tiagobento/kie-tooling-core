@@ -20,8 +20,12 @@ fi
 echo "Packages of scope $SCOPE_TO_LINK have version $KIE_TOOLING_CORE_VERSION on $LINK_TARGET_DIR"
 cd - || exit
 
+
+# Remove carat from version
+EXACT_KIE_TOOLING_CORE_VERSION=$(echo "$KIE_TOOLING_CORE_VERSION" | sed -r 's/[\^]//g')
+
 # Update version to the same one used on $LINK_TARGET_DIR
-yarn update-version-to "${KIE_TOOLING_CORE_VERSION:1}"
+yarn update-version-to "$EXACT_KIE_TOOLING_CORE_VERSION"
 
 # Pack the packages to be linked
 lerna exec 'yarn pack' --stream --no-private
