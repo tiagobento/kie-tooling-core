@@ -39,8 +39,6 @@ jobs:
           git checkout -b ${{ github.event.inputs.new_version }}-prerelease
           yarn update-version-to ${{ github.event.inputs.new_version }}
           git commit -am "Update version to ${{ github.event.inputs.new_version }}"
-          # generate changelogs
-          # commit
           echo ::set-output name=ref::$(git rev-parse HEAD)
 
       - name: "Build"
@@ -74,11 +72,6 @@ jobs:
           RELEASE_DESCRIPTION_BODY="${RELEASE_DESCRIPTION_BODY//$'\n'/'%0A'}"
           RELEASE_DESCRIPTION_BODY="${RELEASE_DESCRIPTION_BODY//$'\r'/'%0D'}"
           echo "::set-output name=body::$RELEASE_DESCRIPTION_BODY"
-
-      - name: "Debug release notes"
-        shell: bash
-        run: |
-          echo "${{ steps.release_notes.outputs.body }}"
 
       - name: "Create GitHub Release"
         uses: actions/create-release@v1.1.4
