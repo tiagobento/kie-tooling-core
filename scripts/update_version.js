@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+const path = require("path");
 const execSync = require("child_process").execSync;
 
-const LERNA_JSON = "./lerna.json";
+const LERNA_JSON = path.resolve("./lerna.json");
 
 // MAIN
 
