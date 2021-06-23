@@ -15,25 +15,8 @@ To get more the details please take a look on each implementation:
 - ['To-do' list View]("src/Pages/TodoList/TodoListViewPage.tsx")
 - [Ping-Pong View]("src/Pages/PingPong/PingPongViewsPage.tsx")
 
-## Setup
-
-### Initialize
-
-To install all dependencies it's necessary to execute the following command on the root folder of the project:
-
-```shell script
-yarn run init
-```
-
-### Build
-
-```shell script
-yarn run build:fast // Normal build
-yarn run build:prod // Optimized build, run TsLint
-```
-
 ### Run
 
 ```shell script
-yarn run start // Starts the dev server on localhost:9001
+yarn start # starts the dev server on http://localhost:9001
 ```

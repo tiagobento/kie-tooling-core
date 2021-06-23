@@ -17,6 +17,6 @@ This extensions has the following commands:
 1. `TODO: Mark all as completed`
    - Marks all the items in the 'To do' list as completed.
 
-## Building
+## Building and running
 
-Run `yarn run build:prod`. A `.vsix` file will be on the `dist` folder.
+Run `yarn build:prod`. A `.vsix` file will be on the `dist` folder.
