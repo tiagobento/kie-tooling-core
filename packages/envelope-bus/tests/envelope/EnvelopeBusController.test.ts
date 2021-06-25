@@ -15,7 +15,11 @@
  */
 
 import { EnvelopeBusController } from "@kie-tooling-core/envelope-bus/dist/envelope";
-import { EnvelopeBusMessage, EnvelopeBusMessagePurpose } from "@kie-tooling-core/envelope-bus/dist/api";
+import {
+  EnvelopeBusMessage,
+  EnvelopeBusMessageDirectSender,
+  EnvelopeBusMessagePurpose,
+} from "@kie-tooling-core/envelope-bus/dist/api";
 
 interface ApiToConsume {
   setText(text: string): void;
@@ -132,6 +136,7 @@ describe("receive without envelopeId", () => {
       type: "init",
       data: [],
       targetEnvelopeId: "any-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
     });
     sentMessages = [];
   });
@@ -146,9 +151,10 @@ describe("receive without envelopeId", () => {
       purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
       type: "someNotification",
       targetEnvelopeId: "any-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
     });
 
-    expect(api.someNotification).toHaveBeenCalled();
+    expect(api.someNotification).not.toHaveBeenCalled();
   });
 
   test("subscription notification", async () => {
@@ -158,6 +164,29 @@ describe("receive without envelopeId", () => {
       purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
       type: "someNotification",
       targetEnvelopeId: "any-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
+    });
+
+    expect(api.someNotification).not.toHaveBeenCalled();
+  });
+
+  test("without targetEnvelopeId", async () => {
+    await incomingMessage({
+      data: [],
+      purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
+      type: "someNotification",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
+    });
+
+    expect(api.someNotification).toHaveBeenCalled();
+  });
+
+  test("from another EnvelopeBusController", async () => {
+    await incomingMessage({
+      data: [],
+      purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
+      type: "someNotification",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_BUS_CONTROLLER,
     });
 
     expect(api.someNotification).not.toHaveBeenCalled();
@@ -177,6 +206,7 @@ describe("receive with envelopeId", () => {
       type: "init",
       data: [],
       targetEnvelopeId: "my-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
     });
     sentMessages = [];
   });
@@ -191,6 +221,7 @@ describe("receive with envelopeId", () => {
       purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
       type: "someNotification",
       targetEnvelopeId: "my-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
     });
 
     expect(api.someNotification).toHaveBeenCalled();
@@ -203,6 +234,7 @@ describe("receive with envelopeId", () => {
       purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
       type: "someNotification",
       targetEnvelopeId: "my-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
     });
 
     expect(api.someNotification).not.toHaveBeenCalled();
@@ -214,6 +246,29 @@ describe("receive with envelopeId", () => {
       purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
       type: "someNotification",
       targetEnvelopeId: "not-my-envelope-id",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
+    });
+
+    expect(api.someNotification).not.toHaveBeenCalled();
+  });
+
+  test("without targetEnvelopeId", async () => {
+    await incomingMessage({
+      data: [],
+      purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
+      type: "someNotification",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_SERVER,
+    });
+
+    expect(api.someNotification).not.toHaveBeenCalled();
+  });
+
+  test("from another EnvelopeBusController", async () => {
+    await incomingMessage({
+      data: [],
+      purpose: EnvelopeBusMessagePurpose.NOTIFICATION,
+      type: "someNotification",
+      directSender: EnvelopeBusMessageDirectSender.ENVELOPE_BUS_CONTROLLER,
     });
 
     expect(api.someNotification).not.toHaveBeenCalled();
