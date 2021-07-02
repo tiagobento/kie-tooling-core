@@ -1,6 +1,6 @@
 {
   "name": "@kie-tooling-core/keyboard-shortcuts",
-  "version": "0.0.0",
+  "version": "0.0.16",
   "description": "",
   "license": "Apache-2.0",
   "files": [
@@ -12,8 +12,8 @@
     "url": "https://github.com/kiegroup/kie-tooling-core.git"
   },
   "dependencies": {
-    "@kie-tooling-core/envelope-bus": "0.0.0",
-    "@kie-tooling-core/operating-system": "0.0.0",
+    "@kie-tooling-core/envelope-bus": "0.0.16",
+    "@kie-tooling-core/operating-system": "0.0.16",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
